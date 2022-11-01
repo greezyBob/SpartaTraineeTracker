@@ -230,6 +230,21 @@ namespace TraineeTrackerApp.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("SpartanTrainer", b =>
+                {
+                    b.Property<string>("SpartansId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("TrainersId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("SpartansId", "TrainersId");
+
+                    b.HasIndex("TrainersId");
+
+                    b.ToTable("SpartanTrainer");
+                });
+
             modelBuilder.Entity("TraineeTrackerApp.Models.Course", b =>
                 {
                     b.Property<int>("Id")
@@ -242,7 +257,12 @@ namespace TraineeTrackerApp.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("TrainerId")
+                        .HasColumnType("nvarchar(450)");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("TrainerId");
 
                     b.ToTable("Courses");
                 });
@@ -290,12 +310,9 @@ namespace TraineeTrackerApp.Migrations
                     b.ToTable("Weeks");
                 });
 
-            modelBuilder.Entity("TraineeTrackerApp.Models.Spartan", b =>
+            modelBuilder.Entity("TraineeTrackerApp.Models.Admin", b =>
                 {
                     b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityUser");
-
-                    b.Property<int>("CourseId")
-                        .HasColumnType("int");
 
                     b.Property<string>("FirstName")
                         .IsRequired()
@@ -305,12 +322,53 @@ namespace TraineeTrackerApp.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.HasDiscriminator().HasValue("Admin");
+                });
+
+            modelBuilder.Entity("TraineeTrackerApp.Models.Spartan", b =>
+                {
+                    b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityUser");
+
+                    b.Property<int>("CourseId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Spartan_FirstName");
+
+                    b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Spartan_LastName");
+
                     b.Property<DateTime>("StartDate")
                         .HasColumnType("datetime2");
 
                     b.HasIndex("CourseId");
 
                     b.HasDiscriminator().HasValue("Spartan");
+                });
+
+            modelBuilder.Entity("TraineeTrackerApp.Models.Trainer", b =>
+                {
+                    b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityUser");
+
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Trainer_FirstName");
+
+                    b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Trainer_LastName");
+
+                    b.Property<DateTime>("StartDate")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("Trainer_StartDate");
+
+                    b.HasDiscriminator().HasValue("Trainer");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -364,6 +422,28 @@ namespace TraineeTrackerApp.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("SpartanTrainer", b =>
+                {
+                    b.HasOne("TraineeTrackerApp.Models.Spartan", null)
+                        .WithMany()
+                        .HasForeignKey("SpartansId")
+                        .OnDelete(DeleteBehavior.SetNull)
+                        .IsRequired();
+
+                    b.HasOne("TraineeTrackerApp.Models.Trainer", null)
+                        .WithMany()
+                        .HasForeignKey("TrainersId")
+                        .OnDelete(DeleteBehavior.SetNull)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("TraineeTrackerApp.Models.Course", b =>
+                {
+                    b.HasOne("TraineeTrackerApp.Models.Trainer", null)
+                        .WithMany("Courses")
+                        .HasForeignKey("TrainerId");
+                });
+
             modelBuilder.Entity("TraineeTrackerApp.Models.Week", b =>
                 {
                     b.HasOne("TraineeTrackerApp.Models.Spartan", "Spartan")
@@ -389,6 +469,11 @@ namespace TraineeTrackerApp.Migrations
             modelBuilder.Entity("TraineeTrackerApp.Models.Spartan", b =>
                 {
                     b.Navigation("Weeks");
+                });
+
+            modelBuilder.Entity("TraineeTrackerApp.Models.Trainer", b =>
+                {
+                    b.Navigation("Courses");
                 });
 #pragma warning restore 612, 618
         }

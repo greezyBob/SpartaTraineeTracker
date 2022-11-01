@@ -21,7 +21,7 @@ public class Week
     [Required]
     public Proficiency ConsultantSkill { get; set; }
     [ForeignKey("Spartan")]
-    public string SpartanId { get; set; }
+    public string? SpartanId { get; set; }
     public Spartan Spartan { get; set; }
 }
 
