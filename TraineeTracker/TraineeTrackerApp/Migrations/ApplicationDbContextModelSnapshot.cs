@@ -427,13 +427,13 @@ namespace TraineeTrackerApp.Migrations
                     b.HasOne("TraineeTrackerApp.Models.Spartan", null)
                         .WithMany()
                         .HasForeignKey("SpartansId")
-                        .OnDelete(DeleteBehavior.SetNull)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("TraineeTrackerApp.Models.Trainer", null)
                         .WithMany()
                         .HasForeignKey("TrainersId")
-                        .OnDelete(DeleteBehavior.SetNull)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
