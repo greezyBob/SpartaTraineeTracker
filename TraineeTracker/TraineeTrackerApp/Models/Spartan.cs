@@ -6,7 +6,6 @@ namespace TraineeTrackerApp.Models;
 public class Spartan : IdentityUser
 {
     public Spartan() { 
-        Trainers = new HashSet<Trainer>();
         Weeks = new HashSet<Week>();
     }
 
@@ -20,6 +19,6 @@ public class Spartan : IdentityUser
 
     public Course Course { get; set; }
 
-    public virtual ICollection<Trainer> Trainers { get; set; }
+    
     public virtual ICollection<Week> Weeks { get; set; }
 }

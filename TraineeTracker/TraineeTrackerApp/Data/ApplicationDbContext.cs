@@ -11,8 +11,6 @@ public class ApplicationDbContext : IdentityDbContext
     { }
 
     public DbSet<Spartan> Spartans { get; set; }
-    public DbSet<Trainer> Trainers { get; set; }
-    public DbSet<Admin> Admins { get; set; }
     public DbSet<Week> Weeks { get; set; }
     public DbSet<Course> Courses { get; set; }
 }
