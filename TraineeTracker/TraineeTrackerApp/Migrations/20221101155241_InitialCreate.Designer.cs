@@ -12,8 +12,8 @@ using TraineeTrackerApp.Data;
 namespace TraineeTrackerApp.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20221101135648_initial")]
-    partial class initial
+    [Migration("20221101155241_InitialCreate")]
+    partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -296,9 +296,6 @@ namespace TraineeTrackerApp.Migrations
                 {
                     b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityUser");
 
-                    b.Property<int>("CourseId")
-                        .HasColumnType("int");
-
                     b.Property<string>("FirstName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -309,8 +306,6 @@ namespace TraineeTrackerApp.Migrations
 
                     b.Property<DateTime>("StartDate")
                         .HasColumnType("datetime2");
-
-                    b.HasIndex("CourseId");
 
                     b.HasDiscriminator().HasValue("Spartan");
                 });
@@ -375,17 +370,6 @@ namespace TraineeTrackerApp.Migrations
                         .IsRequired();
 
                     b.Navigation("Spartan");
-                });
-
-            modelBuilder.Entity("TraineeTrackerApp.Models.Spartan", b =>
-                {
-                    b.HasOne("TraineeTrackerApp.Models.Course", "Course")
-                        .WithMany()
-                        .HasForeignKey("CourseId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Course");
                 });
 
             modelBuilder.Entity("TraineeTrackerApp.Models.Spartan", b =>
