@@ -196,7 +196,14 @@ namespace TraineeTrackerApp.Controllers
             {
                 return Problem("Entity set 'ApplicationDbContext.Weeks' is empty.");
             }
+
+            
             var week = await _service.GetWeekByIdAsync(id);
+            var currentUser = await _userManager.GetUserAsync(HttpContext.User);
+            if (week.SpartanId != currentUser.Id)
+            {
+                return Unauthorized();
+            }
             if (week != null)
             {
                 await _service.RemoveWeekAsync(week);
