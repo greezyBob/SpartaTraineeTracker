@@ -3,22 +3,19 @@
 @{
     ViewData["Title"] = "Index";
 }
-
-<h1>Index</h1>
+<div class="mt-auto mb-auto">
+    <h1>Index</h1>
 
 <p>
     <a asp-action="Create">Create New</a>
 </p>
-<table class="table">
+<table class="table w-75">
     <thead>
         <tr>
             <th>
                 @Html.DisplayNameFor(model => model.WeekStart)
             </th>          
             <th></th>
-            <th>
-                @Html.DisplayNameFor(model => model.Spartan)
-            </th>
         </tr>
     </thead>
     <tbody>
@@ -28,15 +25,15 @@
                 <td>
                     @Html.DisplayFor(modelItem => item.WeekStart)
                 </td>
-                <td>
-                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Spartan.Id)
+                <td class="text-end">
+                    <div class="btn-group">
+                        <a class="btn btn-warning" asp-action="Edit" asp-route-id="@item.Id">Edit</a>
+                        <a class="btn btn-info" asp-action="Details" asp-route-id="@item.Id">Details</a> 
+                        <a class="btn btn-danger" asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                    </div>
                 </td>
             </tr>
         }
     </tbody>
 </table>
+</div>

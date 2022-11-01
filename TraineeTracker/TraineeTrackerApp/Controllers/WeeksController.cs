@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -12,6 +13,7 @@ using TraineeTrackerApp.Services;
 
 namespace TraineeTrackerApp.Controllers
 {
+    [Authorize]
     public class WeeksController : Controller
     {
         private readonly IWeekService _service;
@@ -23,12 +25,17 @@ namespace TraineeTrackerApp.Controllers
             _userManager = userManager;
         }
 
+
         // GET: Weeks
         public async Task<IActionResult> Index()
         {
+            var currentUser = await _userManager.GetUserAsync(HttpContext.User);
             //var applicationDbContext = _service.Weeks.Include(w => w.Spartan);
             //return View(await applicationDbContext.ToListAsync());
-            return View(await _service.GetWeeksAsync());
+            var weeks = await _service.GetWeeksAsync();
+            var filteredWeeks = weeks.Where(w => w.SpartanId == currentUser.Id)
+                .OrderBy(w => w.WeekStart.Date).ToList();
+            return View(filteredWeeks);
         }
 
         // GET: Weeks/Details/5
@@ -46,6 +53,13 @@ namespace TraineeTrackerApp.Controllers
             if (week == null)
             {
                 return NotFound();
+            }
+
+            var currentUser = await _userManager.GetUserAsync(HttpContext.User);
+
+            if (week.SpartanId != currentUser.Id)
+            {
+                return Unauthorized();
             }
 
             return View(week);
@@ -100,6 +114,14 @@ namespace TraineeTrackerApp.Controllers
             {
                 return NotFound();
             }
+
+            var currentUser = await _userManager.GetUserAsync(HttpContext.User);
+
+            if (week.SpartanId != currentUser.Id)
+            {
+                return Unauthorized();
+            }
+
             ViewData["SpartanId"] = new SelectList(_service.GetSpartansAsync().Result, "Id", "Id", week.SpartanId);
             return View(week);
         }
@@ -109,34 +131,41 @@ namespace TraineeTrackerApp.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Start,Stop,Continue,WeekStart,GitHubLink,TechnicalSkill,ConsultantSkill,SpartanId")] Week week)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Start,Stop,Continue,WeekStart,GitHubLink,TechnicalSkill,ConsultantSkill")] Week week)
         {
             if (id != week.Id)
             {
                 return NotFound();
             }
 
-            if (ModelState.IsValid)
+            try
             {
-                try
-                {
-                    var weekToUpdate = _service.GetWeekByIdAsync(id).Result;
-                    weekToUpdate = week;
-                    await _service.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!WeekExists(week.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
+                var weekToUpdate = _service.GetWeekByIdAsync(id).Result;
+                var currentUser = await _userManager.GetUserAsync(HttpContext.User);
+                if (weekToUpdate.SpartanId != currentUser.Id) return Unauthorized();;
+                weekToUpdate.WeekStart = week.WeekStart;
+                weekToUpdate.Start = week.Start ?? weekToUpdate.Start;
+                weekToUpdate.Stop = week.Stop ?? weekToUpdate.Stop;
+                weekToUpdate.Continue = week.Continue ?? weekToUpdate.Continue;
+                weekToUpdate.GitHubLink = week.GitHubLink ?? weekToUpdate.GitHubLink;
+                weekToUpdate.TechnicalSkill = week.TechnicalSkill;
+                weekToUpdate.ConsultantSkill = week.ConsultantSkill;
+
+                await _service.SaveChangesAsync();
             }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!WeekExists(week.Id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+            return RedirectToAction(nameof(Index));
+
             ViewData["SpartanId"] = new SelectList(_service.GetSpartansAsync().Result, "Id", "Id", week.SpartanId);
             return View(week);
         }
@@ -167,18 +196,25 @@ namespace TraineeTrackerApp.Controllers
             {
                 return Problem("Entity set 'ApplicationDbContext.Weeks' is empty.");
             }
+
+            
             var week = await _service.GetWeekByIdAsync(id);
+            var currentUser = await _userManager.GetUserAsync(HttpContext.User);
+            if (week.SpartanId != currentUser.Id)
+            {
+                return Unauthorized();
+            }
             if (week != null)
             {
                 await _service.RemoveWeekAsync(week);
             }
-            
+
             return RedirectToAction(nameof(Index));
         }
 
         private bool WeekExists(int id)
         {
-          return _service.GetWeekByIdAsync(id).Result != null;
+            return _service.GetWeekByIdAsync(id).Result != null;
         }
     }
 }
