@@ -1,0 +1,69 @@
+﻿@model TraineeTrackerApp.Models.Week
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h1>Edit</h1>
+
+<h4>Week</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
+            <div class="form-group">
+                <label asp-for="Start" class="control-label"></label>
+                <input asp-for="Start" class="form-control" />
+                <span asp-validation-for="Start" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Stop" class="control-label"></label>
+                <input asp-for="Stop" class="form-control" />
+                <span asp-validation-for="Stop" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Continue" class="control-label"></label>
+                <input asp-for="Continue" class="form-control" />
+                <span asp-validation-for="Continue" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="WeekStart" class="control-label"></label>
+                <input asp-for="WeekStart" class="form-control" />
+                <span asp-validation-for="WeekStart" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="GitHubLink" class="control-label"></label>
+                <input asp-for="GitHubLink" class="form-control" />
+                <span asp-validation-for="GitHubLink" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="TechnicalSkill" class="control-label"></label>
+                <select asp-for="TechnicalSkill" class="form-control"></select>
+                <span asp-validation-for="TechnicalSkill" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ConsultantSkill" class="control-label"></label>
+                <select asp-for="ConsultantSkill" class="form-control"></select>
+                <span asp-validation-for="ConsultantSkill" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="SpartanId" class="control-label"></label>
+                <select asp-for="SpartanId" class="form-control" asp-items="ViewBag.SpartanId"></select>
+                <span asp-validation-for="SpartanId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
