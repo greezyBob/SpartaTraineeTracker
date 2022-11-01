@@ -5,7 +5,12 @@ namespace TraineeTrackerApp.Models;
 
 public class Trainer : IdentityUser 
 {
-    public int Id { get; set; }
+    public Trainer()
+    {
+        Courses = new HashSet<Course>();
+        Spartans = new HashSet<Spartan>();
+    }
+
     [Required]
     public string FirstName { get; set; }
     [Required]

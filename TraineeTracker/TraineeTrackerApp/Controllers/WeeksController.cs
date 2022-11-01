@@ -7,36 +7,39 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using TraineeTrackerApp.Data;
 using TraineeTrackerApp.Models;
+using TraineeTrackerApp.Services;
 
 namespace TraineeTrackerApp.Controllers
 {
     public class WeeksController : Controller
     {
-        private readonly ApplicationDbContext _context;
+        private readonly IWeekService _service;
 
-        public WeeksController(ApplicationDbContext context)
+        public WeeksController(IWeekService service)
         {
-            _context = context;
+            _service = service;
         }
 
         // GET: Weeks
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.Weeks.Include(w => w.Spartan);
-            return View(await applicationDbContext.ToListAsync());
+            //var applicationDbContext = _service.Weeks.Include(w => w.Spartan);
+            //return View(await applicationDbContext.ToListAsync());
+            return View(await _service.GetWeeksAsync());
         }
 
         // GET: Weeks/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null || _context.Weeks == null)
+            if (id == null || _service.GetWeeksAsync().Result == new List<Week>())
             {
                 return NotFound();
             }
 
-            var week = await _context.Weeks
-                .Include(w => w.Spartan)
-                .FirstOrDefaultAsync(m => m.Id == id);
+            //var week = await _service.Weeks
+            //    .Include(w => w.Spartan)
+            //    .FirstOrDefaultAsync(m => m.Id == id);
+            var week = await _service.GetWeekByIdAsync(id);
             if (week == null)
             {
                 return NotFound();
@@ -48,7 +51,7 @@ namespace TraineeTrackerApp.Controllers
         // GET: Weeks/Create
         public IActionResult Create()
         {
-            ViewData["SpartanId"] = new SelectList(_context.Spartans, "Id", "Id");
+            ViewData["SpartanId"] = new SelectList(_service.GetSpartansAsync().Result, "Id", "Id");
             return View();
         }
 
@@ -61,28 +64,27 @@ namespace TraineeTrackerApp.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Add(week);
-                await _context.SaveChangesAsync();
+                await _service.AddWeek(week);
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["SpartanId"] = new SelectList(_context.Spartans, "Id", "Id", week.SpartanId);
+            ViewData["SpartanId"] = new SelectList(_service.GetSpartansAsync().Result, "Id", "Id", week.SpartanId);
             return View(week);
         }
 
         // GET: Weeks/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null || _context.Weeks == null)
+            if (id == null || _service.GetWeeksAsync().Result == new List<Week>())
             {
                 return NotFound();
             }
 
-            var week = await _context.Weeks.FindAsync(id);
+            var week = await _service.GetWeekByIdAsync(id);
             if (week == null)
             {
                 return NotFound();
             }
-            ViewData["SpartanId"] = new SelectList(_context.Spartans, "Id", "Id", week.SpartanId);
+            ViewData["SpartanId"] = new SelectList(_service.GetSpartansAsync().Result, "Id", "Id", week.SpartanId);
             return View(week);
         }
 
@@ -102,8 +104,9 @@ namespace TraineeTrackerApp.Controllers
             {
                 try
                 {
-                    _context.Update(week);
-                    await _context.SaveChangesAsync();
+                    var weekToUpdate = _service.GetWeekByIdAsync(id).Result;
+                    weekToUpdate = week;
+                    await _service.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -118,21 +121,19 @@ namespace TraineeTrackerApp.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["SpartanId"] = new SelectList(_context.Spartans, "Id", "Id", week.SpartanId);
+            ViewData["SpartanId"] = new SelectList(_service.GetSpartansAsync().Result, "Id", "Id", week.SpartanId);
             return View(week);
         }
 
         // GET: Weeks/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null || _context.Weeks == null)
+            if (id == null || _service.GetWeeksAsync().Result == new List<Week>())
             {
                 return NotFound();
             }
 
-            var week = await _context.Weeks
-                .Include(w => w.Spartan)
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var week = await _service.GetWeekByIdAsync(id);
             if (week == null)
             {
                 return NotFound();
@@ -146,23 +147,22 @@ namespace TraineeTrackerApp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            if (_context.Weeks == null)
+            if (_service.GetWeeksAsync().Result == new List<Week>())
             {
-                return Problem("Entity set 'ApplicationDbContext.Weeks'  is null.");
+                return Problem("Entity set 'ApplicationDbContext.Weeks' is empty.");
             }
-            var week = await _context.Weeks.FindAsync(id);
+            var week = await _service.GetWeekByIdAsync(id);
             if (week != null)
             {
-                _context.Weeks.Remove(week);
+                await _service.RemoveWeekAsync(week);
             }
             
-            await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool WeekExists(int id)
         {
-          return _context.Weeks.Any(e => e.Id == id);
+          return _service.GetWeekByIdAsync(id).Result != null;
         }
     }
 }
