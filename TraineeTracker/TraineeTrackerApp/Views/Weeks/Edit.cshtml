@@ -38,21 +38,10 @@
                 <input asp-for="GitHubLink" class="form-control" />
                 <span asp-validation-for="GitHubLink" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="TechnicalSkill" class="control-label"></label>
-                <select asp-for="TechnicalSkill" class="form-control"></select>
-                <span asp-validation-for="TechnicalSkill" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="ConsultantSkill" class="control-label"></label>
-                <select asp-for="ConsultantSkill" class="form-control"></select>
-                <span asp-validation-for="ConsultantSkill" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="SpartanId" class="control-label"></label>
-                <select asp-for="SpartanId" class="form-control" asp-items="ViewBag.SpartanId"></select>
-                <span asp-validation-for="SpartanId" class="text-danger"></span>
-            </div>
+            @Html.DropDownListFor(w => w.TechnicalSkill,
+            new SelectList(Enum.GetValues(typeof(Proficiency))), "Select technical skill level")
+            @Html.DropDownListFor(w => w.ConsultantSkill,
+            new SelectList(Enum.GetValues(typeof(Proficiency))), "Select consultant skill level")            
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
             </div>
