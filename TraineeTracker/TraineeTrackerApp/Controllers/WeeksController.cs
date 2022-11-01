@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -14,10 +15,12 @@ namespace TraineeTrackerApp.Controllers
     public class WeeksController : Controller
     {
         private readonly IWeekService _service;
+        private UserManager<Spartan> _userManager;
 
-        public WeeksController(IWeekService service)
+        public WeeksController(IWeekService service, UserManager<Spartan> userManager)
         {
             _service = service;
+            _userManager = userManager;
         }
 
         // GET: Weeks
@@ -60,13 +63,26 @@ namespace TraineeTrackerApp.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Start,Stop,Continue,WeekStart,GitHubLink,TechnicalSkill,ConsultantSkill,SpartanId")] Week week)
+        public async Task<IActionResult> Create([Bind("Id,Start,Stop,Continue,WeekStart,GitHubLink,TechnicalSkill,ConsultantSkill")] Week week)
         {
-            if (ModelState.IsValid)
+            var currentUser = await _userManager.GetUserAsync(HttpContext.User);
+            week.SpartanId = currentUser.Id;
+            week.Spartan = currentUser;
+
+            //var newWeek = new Week
+            //{
+            //    Start = week.Start,
+            //    Stop = week.Stop,
+            //    Continue = week.Continue,
+            //    Spartan = currentUser
+            //};
+
+            if (week.SpartanId != null)
             {
                 await _service.AddWeek(week);
                 return RedirectToAction(nameof(Index));
             }
+
             ViewData["SpartanId"] = new SelectList(_service.GetSpartansAsync().Result, "Id", "Id", week.SpartanId);
             return View(week);
         }
