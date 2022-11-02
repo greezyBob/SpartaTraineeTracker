@@ -63,8 +63,8 @@ namespace TraineeTrackerApp.Data
 
             var admin = new Spartan
             {
-                UserName = "admin@SpartaGlobal.com",
-                Email = "admin@SpartaGlobal.com",
+                UserName = "admin@spartaglobal.com",
+                Email = "admin@spartaglobal.com",
                 EmailConfirmed = true,
                 FirstName = "Joe",
                 LastName = "Bloggs"
@@ -177,7 +177,7 @@ namespace TraineeTrackerApp.Data
             syed.Weeks = new List<Week> { weeks[3], weeks[4] };
 
             michael.Course = new List<Course> { courses[0] }; 
-            syed.Weeks = new List<Week> { weeks[5], weeks[6] };
+            michael.Weeks = new List<Week> { weeks[5], weeks[6] };
 
             context.Spartans.AddRange(mark, syed, michael);
             context.SaveChanges();
