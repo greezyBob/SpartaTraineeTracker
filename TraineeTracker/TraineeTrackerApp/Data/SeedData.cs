@@ -27,8 +27,8 @@ namespace TraineeTrackerApp.Data
 
             var mark = new Spartan
             {
-                UserName = "Mark@SpartaGlobal.com",
-                Email = "Mark@SpartaGlobal.com",
+                UserName = "mark@spartaglobal.com",
+                Email = "mark@spartaglobal.com",
                 EmailConfirmed = true,
                 FirstName = "Mark",
                 LastName = "Pollard",
@@ -36,8 +36,8 @@ namespace TraineeTrackerApp.Data
             };
             var syed = new Spartan
             {
-                UserName = "Syed@SpartaGlobal.com",
-                Email = "Syed@SpartaGlobal.com",
+                UserName = "syed@spartaglobal.com",
+                Email = "syed@spartaglobal.com",
                 EmailConfirmed = true,
                 FirstName = "Syed",
                 LastName = "Ahmed",
@@ -45,8 +45,8 @@ namespace TraineeTrackerApp.Data
             };
             var michael = new Spartan
             {
-                UserName = "Michael@SpartaGlobal.com",
-                Email = "Micheal@SpartaGlobal.com",
+                UserName = "michael@spartaglobal.com",
+                Email = "micheal@spartaglobal.com",
                 EmailConfirmed = true,
                 FirstName = "Michael",
                 LastName = "Davies",

@@ -33,7 +33,6 @@ namespace TraineeTrackerApp.Areas.Identity.Pages.Account
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
         private readonly RoleManager<IdentityRole> _roleManager;
-        private readonly RoleStore<IdentityRole> _roleStore;
 
         public RegisterModel(
             UserManager<Spartan> userManager,
