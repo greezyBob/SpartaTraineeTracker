@@ -13,12 +13,14 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
 using TraineeTrackerApp.Models;
+using TraineeTrackerApp.Utilities;
 
 namespace TraineeTrackerApp.Areas.Identity.Pages.Account
 {
@@ -30,13 +32,15 @@ namespace TraineeTrackerApp.Areas.Identity.Pages.Account
         private readonly IUserEmailStore<Spartan> _emailStore;
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
+        private readonly RoleManager<IdentityRole> _roleManager;
 
         public RegisterModel(
             UserManager<Spartan> userManager,
             IUserStore<Spartan> userStore,
             SignInManager<Spartan> signInManager,
             ILogger<RegisterModel> logger,
-            IEmailSender emailSender)
+            IEmailSender emailSender,
+            RoleManager<IdentityRole> roleManager)
         {
             _userManager = userManager;
             _userStore = userStore;
@@ -44,6 +48,7 @@ namespace TraineeTrackerApp.Areas.Identity.Pages.Account
             _signInManager = signInManager;
             _logger = logger;
             _emailSender = emailSender;
+            _roleManager = roleManager;
         }
 
         /// <summary>
@@ -76,8 +81,9 @@ namespace TraineeTrackerApp.Areas.Identity.Pages.Account
             ///     directly from your code. This API may change or be removed in future releases.
             /// </summary>
             [Required]
-            [EmailAddress]
+            [DataType(DataType.EmailAddress)]
             [Display(Name = "Email")]
+            [RegularExpression(@"^[a-zA-Z0-9._%+-]+(@spartaglobal\.com)$", ErrorMessage = "Registration limited to spartaglobal.com")]
             public string Email { get; set; }
 
             /// <summary>
@@ -103,6 +109,13 @@ namespace TraineeTrackerApp.Areas.Identity.Pages.Account
 
         public async Task OnGetAsync(string returnUrl = null)
         {
+            if (!_roleManager.RoleExistsAsync(TheRoles.Role_Trainee).GetAwaiter().GetResult())
+            {
+                _roleManager.CreateAsync(new IdentityRole(TheRoles.Role_Admin)).GetAwaiter().GetResult();
+                _roleManager.CreateAsync(new IdentityRole(TheRoles.Role_Trainer)).GetAwaiter().GetResult();
+                _roleManager.CreateAsync(new IdentityRole(TheRoles.Role_Trainee)).GetAwaiter().GetResult();
+            }
+
             ReturnUrl = returnUrl;
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
         }
@@ -122,6 +135,8 @@ namespace TraineeTrackerApp.Areas.Identity.Pages.Account
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User created a new account with password.");
+
+                    await _userManager.AddToRoleAsync(user, TheRoles.Role_Trainee);
 
                     var userId = await _userManager.GetUserIdAsync(user);
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);

@@ -16,32 +16,34 @@ namespace TraineeTrackerApp.Controllers
     [Authorize]
     public class TraineesController : Controller
     {
-        private readonly ITraineeService _service;
+        private readonly ITraineeService _traineeService;
+        private readonly IWeekService _weekService;
         private UserManager<Spartan> _userManager;
 
-        public TraineesController(ITraineeService service, UserManager<Spartan> userManager)
+        public TraineesController(ITraineeService traineeService, IWeekService weekService, UserManager<Spartan> userManager)
         {
-            _service = service;
+            _traineeService = traineeService;
+            _weekService = weekService;
             _userManager = userManager;
         }
 
 
-        // GET: Weeks
+        // GET: Trainees
         public async Task<IActionResult> Index()
         {
             var currentUser = await _userManager.GetUserAsync(HttpContext.User);
             //var applicationDbContext = _service.Weeks.Include(w => w.Spartan);
             //return View(await applicationDbContext.ToListAsync());
-            var spartans = await _service.GetSpartansAsync();
+            var spartans = await _traineeService.GetSpartansAsync();
             //var filteredWeeks = weeks.Where(w => w.Email == currentUser.Id)
             //    .OrderBy(w => w.Email).ToList();
             return View(spartans);
         }
 
-        // GET: Weeks/Details/5
+        // GET: Trainees/Details/{id}
         public async Task<IActionResult> Details(string? id)
         {
-            if (id == null || _service.GetSpartansAsync().Result == new List<Spartan>())
+            if (id == null || _traineeService.GetSpartansAsync().Result == new List<Spartan>())
             {
                 return NotFound();
             }
@@ -49,7 +51,7 @@ namespace TraineeTrackerApp.Controllers
             //var week = await _service.Weeks
             //    .Include(w => w.Spartan)
             //    .FirstOrDefaultAsync(m => m.Id == id);
-            var spartan = await _service.GetSpartanByIdAsync(id);
+            var spartan = await _traineeService.GetSpartanByIdAsync(id);
             if (spartan == null)
             {
                 return NotFound();
@@ -58,156 +60,36 @@ namespace TraineeTrackerApp.Controllers
             return View(spartan);
         }
 
-        //// GET: Weeks/Create
-        //public IActionResult Create()
-        //{
-        //    ViewData["SpartanId"] = new SelectList(_service.GetSpartansAsync().Result, "Id", "Id");
-        //    return View();
-        //}
+        // GET: Trainees/{TraineeId}/Weeks
+        public async Task<IActionResult> Tracker(string? id)
+        {
+            var weeks = await _traineeService.GetWeeksBySpartanIdAsync(id);
 
-        //// POST: Weeks/Create
-        //// To protect from overposting attacks, enable the specific properties you want to bind to.
-        //// For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public async Task<IActionResult> Create([Bind("Id,Start,Stop,Continue,WeekStart,GitHubLink,TechnicalSkill,ConsultantSkill")] Week week)
-        //{
-        //    var currentUser = await _userManager.GetUserAsync(HttpContext.User);
-        //    week.SpartanId = currentUser.Id;
-        //    week.Spartan = currentUser;
+            //var filteredWeeks = weeks.Where(w => w.SpartanId == id)
+            //    .OrderBy(w => w.WeekStart).ToList();
 
-        //    //var newWeek = new Week
-        //    //{
-        //    //    Start = week.Start,
-        //    //    Stop = week.Stop,
-        //    //    Continue = week.Continue,
-        //    //    Spartan = currentUser
-        //    //};
+            return View(weeks);
+        }
 
-        //    if (week.SpartanId != null)
-        //    {
-        //        await _service.AddWeek(week);
-        //        return RedirectToAction(nameof(Index));
-        //    }
+        // GET: Trainees/{TraineeId}/Weeks/{weekId}
+        public async Task<IActionResult> WeekDetails(int? id)
+        {
+            if (id == null || _weekService.GetWeeksAsync().Result == new List<Week>())
+            {
+                return NotFound();
+            }
 
-        //    ViewData["SpartanId"] = new SelectList(_service.GetSpartansAsync().Result, "Id", "Id", week.SpartanId);
-        //    return View(week);
-        //}
+            //var week = await _service.Weeks
+            //    .Include(w => w.Spartan)
+            //    .FirstOrDefaultAsync(m => m.Id == id);
+            var week = await _weekService.GetWeekByIdAsync(id);
+            if (week == null)
+            {
+                return NotFound();
+            }
 
-        //// GET: Weeks/Edit/5
-        //public async Task<IActionResult> Edit(int? id)
-        //{
-        //    if (id == null || _service.GetWeeksAsync().Result == new List<Week>())
-        //    {
-        //        return NotFound();
-        //    }
+            return View(week);
+        }
 
-        //    var week = await _service.GetWeekByIdAsync(id);
-        //    if (week == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    var currentUser = await _userManager.GetUserAsync(HttpContext.User);
-
-        //    if (week.SpartanId != currentUser.Id)
-        //    {
-        //        return Unauthorized();
-        //    }
-
-        //    ViewData["SpartanId"] = new SelectList(_service.GetSpartansAsync().Result, "Id", "Id", week.SpartanId);
-        //    return View(week);
-        //}
-
-        //// POST: Weeks/Edit/5
-        //// To protect from overposting attacks, enable the specific properties you want to bind to.
-        //// For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public async Task<IActionResult> Edit(int id, [Bind("Id,Start,Stop,Continue,WeekStart,GitHubLink,TechnicalSkill,ConsultantSkill")] Week week)
-        //{
-        //    if (id != week.Id)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    try
-        //    {
-        //        var weekToUpdate = _service.GetWeekByIdAsync(id).Result;
-        //        var currentUser = await _userManager.GetUserAsync(HttpContext.User);
-        //        if (weekToUpdate.SpartanId != currentUser.Id) return Unauthorized(); ;
-        //        weekToUpdate.WeekStart = week.WeekStart;
-        //        weekToUpdate.Start = week.Start ?? weekToUpdate.Start;
-        //        weekToUpdate.Stop = week.Stop ?? weekToUpdate.Stop;
-        //        weekToUpdate.Continue = week.Continue ?? weekToUpdate.Continue;
-        //        weekToUpdate.GitHubLink = week.GitHubLink ?? weekToUpdate.GitHubLink;
-        //        weekToUpdate.TechnicalSkill = week.TechnicalSkill;
-        //        weekToUpdate.ConsultantSkill = week.ConsultantSkill;
-
-        //        await _service.SaveChangesAsync();
-        //    }
-        //    catch (DbUpdateConcurrencyException)
-        //    {
-        //        if (!WeekExists(week.Id))
-        //        {
-        //            return NotFound();
-        //        }
-        //        else
-        //        {
-        //            throw;
-        //        }
-        //    }
-        //    return RedirectToAction(nameof(Index));
-
-        //    ViewData["SpartanId"] = new SelectList(_service.GetSpartansAsync().Result, "Id", "Id", week.SpartanId);
-        //    return View(week);
-        //}
-
-        //// GET: Weeks/Delete/5
-        //public async Task<IActionResult> Delete(int? id)
-        //{
-        //    if (id == null || _service.GetWeeksAsync().Result == new List<Week>())
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    var week = await _service.GetWeekByIdAsync(id);
-        //    if (week == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    return View(week);
-        //}
-
-        //// POST: Weeks/Delete/5
-        //[HttpPost, ActionName("Delete")]
-        //[ValidateAntiForgeryToken]
-        //public async Task<IActionResult> DeleteConfirmed(int id)
-        //{
-        //    if (_service.GetWeeksAsync().Result == new List<Week>())
-        //    {
-        //        return Problem("Entity set 'ApplicationDbContext.Weeks' is empty.");
-        //    }
-
-
-        //    var week = await _service.GetWeekByIdAsync(id);
-        //    var currentUser = await _userManager.GetUserAsync(HttpContext.User);
-        //    if (week.SpartanId != currentUser.Id)
-        //    {
-        //        return Unauthorized();
-        //    }
-        //    if (week != null)
-        //    {
-        //        await _service.RemoveWeekAsync(week);
-        //    }
-
-        //    return RedirectToAction(nameof(Index));
-        //}
-
-        //private bool WeekExists(int id)
-        //{
-        //    return _service.GetWeekByIdAsync(id).Result != null;
-        //}
     }
 }

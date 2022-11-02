@@ -6,5 +6,6 @@ namespace TraineeTrackerApp.Services
     {
         public Task<List<Spartan>> GetSpartansAsync();
         public Task<Spartan?> GetSpartanByIdAsync(string? id);
+        public Task<List<Week>> GetWeeksBySpartanIdAsync(string? id);
     }
 }
