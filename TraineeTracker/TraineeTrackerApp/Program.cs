@@ -23,6 +23,7 @@ builder.Services.AddDefaultIdentity<Spartan>(options => options.SignIn.RequireCo
     .AddEntityFrameworkStores<ApplicationDbContext>();
 
 builder.Services.AddScoped<IWeekService, WeekService>();
+builder.Services.AddScoped<ITraineeService, TraineeService>();
 
 var app = builder.Build();
 
