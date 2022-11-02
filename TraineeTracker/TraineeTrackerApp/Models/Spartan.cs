@@ -17,7 +17,7 @@ public class Spartan : IdentityUser
     [DataType(DataType.Date)]
     public DateTime StartDate { get; set; }
 
-    public Course Course { get; set; }
+    public virtual ICollection<Course> Course { get; set; }
 
     public virtual ICollection<Week> Weeks { get; set; }
 }

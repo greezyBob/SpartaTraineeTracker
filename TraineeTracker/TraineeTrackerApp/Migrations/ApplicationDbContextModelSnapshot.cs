@@ -238,11 +238,16 @@ namespace TraineeTrackerApp.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
+                    b.Property<string>("SpartanId")
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("SpartanId");
 
                     b.ToTable("Courses");
                 });
@@ -359,6 +364,13 @@ namespace TraineeTrackerApp.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("TraineeTrackerApp.Models.Course", b =>
+                {
+                    b.HasOne("TraineeTrackerApp.Models.Spartan", null)
+                        .WithMany("Course")
+                        .HasForeignKey("SpartanId");
+                });
+
             modelBuilder.Entity("TraineeTrackerApp.Models.Week", b =>
                 {
                     b.HasOne("TraineeTrackerApp.Models.Spartan", "Spartan")
@@ -372,6 +384,8 @@ namespace TraineeTrackerApp.Migrations
 
             modelBuilder.Entity("TraineeTrackerApp.Models.Spartan", b =>
                 {
+                    b.Navigation("Course");
+
                     b.Navigation("Weeks");
                 });
 #pragma warning restore 612, 618
