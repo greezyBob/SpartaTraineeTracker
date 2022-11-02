@@ -17,8 +17,10 @@ public class Week
     public DateTime WeekStart { get; set; }
     public string? GitHubLink { get; set; }
     [Required]
+    [Display(Name = "Technical Skill")]
     public Proficiency TechnicalSkill { get; set; }
     [Required]
+    [Display(Name = "Consultant Skill")]
     public Proficiency ConsultantSkill { get; set; }
     [ForeignKey("Spartan")]
     public string? SpartanId { get; set; }
