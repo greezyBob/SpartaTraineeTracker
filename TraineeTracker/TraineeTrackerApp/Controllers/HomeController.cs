@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 using TraineeTrackerApp.Models;
 
@@ -13,14 +14,9 @@ public class HomeController : Controller
         _logger = logger;
     }
 
+    [Authorize]
     public IActionResult Index()
     {
-        //if (!User.Identity.IsAuthenticated)
-        //{
-        //    return RedirectToAction("Login", "Identity/Account");
-        //}
-
-        //return RedirectToAction("Index", "Weeks");
 
         return View();
     }
