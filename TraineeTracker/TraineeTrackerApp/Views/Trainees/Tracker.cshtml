@@ -1,15 +1,12 @@
 ﻿@model IEnumerable<TraineeTrackerApp.Models.Week>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Tracker";
 }
 <div class="mt-auto mb-auto">
     <h1>Index</h1>
 
-    <p>
-        <a asp-action="Create">Create New</a>
-    </p>
-    <table class="table">
+    <table class="table w-75">
         <thead>
             <tr>
                 <th>
@@ -21,16 +18,16 @@
         <tbody>
             @foreach (var item in Model)
             {
-                <tr>
-                    <td>
+                    <tr>
+                        <td>
                         @Html.DisplayFor(modelItem => item.WeekStart)
-                    </td>
-                    <td class="text-end">
-                        <div class="btn-group">
-                            <a class="btn btn-info" asp-action="Details" asp-route-id="@item.Id">Details</a>
-                        </div>
-                    </td>
-                </tr>
+                        </td>
+                        <td class="text-end">
+                            <div class="btn-group">
+                                    <a class="btn btn-info" asp-action="WeekDetails" asp-route-id="@item.Id">WeekDetails</a>
+                            </div>
+                        </td>
+                    </tr>
             }
         </tbody>
     </table>
