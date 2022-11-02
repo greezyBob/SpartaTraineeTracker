@@ -76,8 +76,9 @@ namespace TraineeTrackerApp.Areas.Identity.Pages.Account
             ///     directly from your code. This API may change or be removed in future releases.
             /// </summary>
             [Required]
-            [EmailAddress]
+            [DataType(DataType.EmailAddress)]
             [Display(Name = "Email")]
+            [RegularExpression(@"^[a-zA-Z0-9._%+-]+(@spartaglobal\.com)$", ErrorMessage = "Registration limited to spartaglobal.com")]
             public string Email { get; set; }
 
             /// <summary>
