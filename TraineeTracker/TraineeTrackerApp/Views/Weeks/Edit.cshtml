@@ -9,33 +9,33 @@
 <h4>Week</h4>
 <hr />
 <div class="row">
-    <div class="col-md-4">
+    <div class="col-md-8">
         <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Id" />
-            <div class="form-group">
-                <label asp-for="Start" class="control-label"></label>
-                <input asp-for="Start" class="form-control" />
+            <div class="form-group card border-dark mb-4">
+                <label asp-for="Start" class="control-label card-header spartapink text-white fs-4"></label>
+                <textarea asp-for="Start" class="form-control card-body"></textarea>
                 <span asp-validation-for="Start" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="Stop" class="control-label"></label>
-                <input asp-for="Stop" class="form-control" />
+            <div class="form-group card border-dark mb-4">
+                <label asp-for="Stop" class="control-label card-header spartapink text-white fs-4"></label>
+                <textarea asp-for="Stop" class="form-control card-body"></textarea>
                 <span asp-validation-for="Stop" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="Continue" class="control-label"></label>
-                <input asp-for="Continue" class="form-control" />
+            <div class="form-group card border-dark mb-4">
+                <label asp-for="Continue" class="control-label card-header spartapink text-white fs-4"></label>
+                <textarea asp-for="Continue" class="form-control card-body"></textarea>
                 <span asp-validation-for="Continue" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="WeekStart" class="control-label"></label>
-                <input asp-for="WeekStart" class="form-control" />
+            <div class="form-group card border-dark mb-4 col-md-6">
+                <label asp-for="WeekStart" class="control-label card-header spartapink text-white fs-4"></label>
+                <input asp-for="WeekStart" class="form-control card-body" />
                 <span asp-validation-for="WeekStart" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="GitHubLink" class="control-label"></label>
-                <input asp-for="GitHubLink" class="form-control" />
+            <div class="form-group card border-dark mb-4 col-md-6">
+                <label asp-for="GitHubLink" class="control-label card-header spartapink text-white fs-4"></label>
+                <input asp-for="GitHubLink" class="form-control card-body" />
                 <span asp-validation-for="GitHubLink" class="text-danger"></span>
             </div>
             @Html.DropDownListFor(w => w.TechnicalSkill,
