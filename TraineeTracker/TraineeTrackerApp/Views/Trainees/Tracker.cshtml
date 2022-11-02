@@ -1,4 +1,4 @@
-﻿@model IEnumerable<TraineeTrackerApp.Models.Spartan>
+﻿@model IEnumerable<TraineeTrackerApp.Models.Week>
 
 @{
     ViewData["Title"] = "Index";
@@ -6,11 +6,14 @@
 <div class="mt-auto mb-auto">
     <h1>Index</h1>
 
-    <table class="table w-75">
+    <p>
+        <a asp-action="Create">Create New</a>
+    </p>
+    <table class="table">
         <thead>
             <tr>
                 <th>
-                    @Html.DisplayNameFor(model => model.Email)
+                    @Html.DisplayNameFor(model => model.WeekStart)
                 </th>
                 <th></th>
             </tr>
@@ -20,12 +23,11 @@
             {
                 <tr>
                     <td>
-                        @Html.DisplayFor(modelItem => item.Email)
+                        @Html.DisplayFor(modelItem => item.WeekStart)
                     </td>
                     <td class="text-end">
                         <div class="btn-group">
                             <a class="btn btn-info" asp-action="Details" asp-route-id="@item.Id">Details</a>
-                            <a class="btn btn-info" asp-action="Tracker" asp-route-id="@item.Id">Tracker</a>
                         </div>
                     </td>
                 </tr>

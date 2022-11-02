@@ -58,6 +58,17 @@ namespace TraineeTrackerApp.Controllers
             return View(spartan);
         }
 
+        [HttpGet("Trainees/{id}/Weeks")]
+        public async Task<IActionResult> Tracker(string? id)
+        {
+            var weeks = await _service.GetWeeksBySpartanIdAsync(id);
+
+            //var filteredWeeks = weeks.Where(w => w.SpartanId == id)
+            //    .OrderBy(w => w.WeekStart).ToList();
+
+            return View(weeks);
+        }
+
         //// GET: Weeks/Create
         //public IActionResult Create()
         //{
