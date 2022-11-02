@@ -164,10 +164,10 @@ namespace TraineeTrackerApp.Controllers
                     throw;
                 }
             }
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction(nameof(Details), new {id = week.Id});
 
-            ViewData["SpartanId"] = new SelectList(_service.GetSpartansAsync().Result, "Id", "Id", week.SpartanId);
-            return View(week);
+            //ViewData["SpartanId"] = new SelectList(_service.GetSpartansAsync().Result, "Id", "Id", week.SpartanId);
+            //return View(week);
         }
 
         // GET: Weeks/Delete/5

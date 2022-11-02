@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace TraineeTrackerApp.Migrations
 {
-    public partial class ayylmao : Migration
+    public partial class lmao : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
