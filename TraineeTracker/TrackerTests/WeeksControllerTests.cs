@@ -1,13 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TraineeTrackerApp.Models;
 using Moq;
 using TraineeTrackerApp.Services;
@@ -18,30 +11,7 @@ namespace TrackerTests;
 
 internal class WeeksControllerTests
 {
-    [Ignore("No idea how to do this atm.")]
-    [Test]
-    public async Task Index_ReturnsListOfWeeks()
-    {
-        // Arrange
-        var serviceMock = new Mock<IWeekService>();
-        serviceMock.Setup(mock => mock.GetWeeksAsync()).ReturnsAsync(new List<Week>());
-
-        var store = new Mock<IUserStore<Spartan>>();
-        var userMgrMock = new Mock<UserManager<Spartan>>(store.Object, null, null, null, null, null, null, null, null);
-        userMgrMock.Setup(mock => mock.GetUserAsync(It.IsAny<ClaimsPrincipal>())).ReturnsAsync(It.IsAny<Spartan>());
-
-        var sut = new WeeksController(serviceMock.Object, userMgrMock.Object);
-
-        // Act
-        var result = await sut.Index();
-
-        // Act
-        Assert.That(result, Is.TypeOf<ActionResult>());
-        //var model = Assert.IsAssignableFrom<IEnumerable<StormSessionViewModel>>(
-        //    viewResult.ViewData.Model);
-        //Assert.Equal(2, model.Count());
-    }
-
+    #region Index()
     //public async Task<IActionResult> Index()
     //{
     //    var currentUser = await _userManager.GetUserAsync(HttpContext.User);
@@ -53,6 +23,108 @@ internal class WeeksControllerTests
     //    return View(filteredWeeks);
     //}
 
+    [Test]
+    public async Task Index_ReturnsTypeOfListWeeks()
+    {
+        // Arrange
+        var serviceMock = new Mock<IWeekService>();
+        serviceMock.Setup(mock => mock.GetWeeksAsync()).ReturnsAsync(new List<Week>());
+
+        var store = new Mock<IUserStore<Spartan>>();
+        var userMgrMock = new Mock<UserManager<Spartan>>(store.Object, null, null, null, null, null, null, null, null);
+        userMgrMock.Setup(mock => mock.GetUserAsync(It.IsAny<ClaimsPrincipal>())).ReturnsAsync(It.IsAny<Spartan>());
+
+        var sut = new WeeksController(serviceMock.Object, userMgrMock.Object);
+        sut.ControllerContext = new ControllerContext
+         {
+             HttpContext = new DefaultHttpContext()
+         };
+
+        // Act
+        var result = await sut.Index();
+
+        // Assert
+        Assert.That(result, Is.TypeOf<ViewResult>());
+    }
+
+    [Test]
+    public void Index_GivenUserHasWeeks_ReturnsListOfUsersWeeks()
+    {
+        // Arrange
+        Spartan user = new Spartan
+        {
+            Id = Guid.NewGuid().ToString(),
+        };
+
+        List<Week> weeks = new List<Week>();
+        weeks.Add(new Week{ SpartanId = user.Id });
+        weeks.Add(new Week{ SpartanId = user.Id });
+        weeks.Add(new Week{ SpartanId = user.Id });
+        weeks.Add(new Week{ SpartanId = Guid.NewGuid().ToString() });
+        weeks.Add(new Week{ SpartanId = Guid.NewGuid().ToString() });
+
+        var serviceMock = new Mock<IWeekService>();
+        serviceMock.Setup(mock => mock.GetWeeksAsync()).ReturnsAsync(weeks);
+
+        var store = new Mock<IUserStore<Spartan>>();
+        var userMgrMock = new Mock<UserManager<Spartan>>(store.Object, null, null, null, null, null, null, null, null);
+        userMgrMock.Setup(mock => mock.GetUserAsync(It.IsAny<ClaimsPrincipal>())).ReturnsAsync(user);
+
+        var sut = new WeeksController(serviceMock.Object, userMgrMock.Object);
+        sut.ControllerContext = new ControllerContext
+        {
+            HttpContext = new DefaultHttpContext()
+        };
+
+        // Act
+        var result = sut.Index().Result;
+        var viewResult = (ViewResult)result;
+        var viewDataList = (List<Week>)viewResult.ViewData.Model;
+
+        // Assert
+        Assert.That(viewDataList.Count(), Is.EqualTo(3));
+        Assert.That(viewDataList[0], Is.EqualTo(weeks[0]));
+        Assert.That(viewDataList[1], Is.EqualTo(weeks[1]));
+        Assert.That(viewDataList[2], Is.EqualTo(weeks[2]));
+    }
+
+    [Test]
+    public void Index_GivenUserHasNoWeeks_ReturnsEmptyListOfWeeks()
+    {
+        // Arrange
+        Spartan user = new Spartan
+        {
+            Id = Guid.NewGuid().ToString(),
+        };
+
+        List<Week> weeks = new List<Week>();
+        weeks.Add(new Week { SpartanId = Guid.NewGuid().ToString() });
+        weeks.Add(new Week { SpartanId = Guid.NewGuid().ToString() });
+
+        var serviceMock = new Mock<IWeekService>();
+        serviceMock.Setup(mock => mock.GetWeeksAsync()).ReturnsAsync(weeks);
+
+        var store = new Mock<IUserStore<Spartan>>();
+        var userMgrMock = new Mock<UserManager<Spartan>>(store.Object, null, null, null, null, null, null, null, null);
+        userMgrMock.Setup(mock => mock.GetUserAsync(It.IsAny<ClaimsPrincipal>())).ReturnsAsync(user);
+
+        var sut = new WeeksController(serviceMock.Object, userMgrMock.Object);
+        sut.ControllerContext = new ControllerContext
+        {
+            HttpContext = new DefaultHttpContext()
+        };
+
+        // Act
+        var result = sut.Index().Result;
+        var viewResult = (ViewResult)result;
+        var viewDataList = (List<Week>)viewResult.ViewData.Model;
+
+        // Assert
+        Assert.That(viewDataList.Count(), Is.EqualTo(0));
+    }
+    #endregion
+
+    #region Details(int)
     //// GET: Weeks/Details/5
     //public async Task<IActionResult> Details(int? id)
     //{
@@ -79,7 +151,9 @@ internal class WeeksControllerTests
 
     //    return View(week);
     //}
+    #endregion
 
+    #region Create()
     //// GET: Weeks/Create
     //public IActionResult Create()
     //{
@@ -115,7 +189,9 @@ internal class WeeksControllerTests
     //    ViewData["SpartanId"] = new SelectList(_service.GetSpartansAsync().Result, "Id", "Id", week.SpartanId);
     //    return View(week);
     //}
+    #endregion
 
+    #region Edit(int)
     //// GET: Weeks/Edit/5
     //public async Task<IActionResult> Edit(int? id)
     //{
@@ -140,7 +216,9 @@ internal class WeeksControllerTests
     //    ViewData["SpartanId"] = new SelectList(_service.GetSpartansAsync().Result, "Id", "Id", week.SpartanId);
     //    return View(week);
     //}
+    #endregion
 
+    #region Edit(int, Week)
     //// POST: Weeks/Edit/5
     //// To protect from overposting attacks, enable the specific properties you want to bind to.
     //// For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
@@ -184,7 +262,9 @@ internal class WeeksControllerTests
     //    ViewData["SpartanId"] = new SelectList(_service.GetSpartansAsync().Result, "Id", "Id", week.SpartanId);
     //    return View(week);
     //}
+    #endregion
 
+    #region Delete(int)
     //// GET: Weeks/Delete/5
     //public async Task<IActionResult> Delete(int? id)
     //{
@@ -201,7 +281,9 @@ internal class WeeksControllerTests
 
     //    return View(week);
     //}
+    #endregion
 
+    #region DeleteConfirmed(int)
     //// POST: Weeks/Delete/5
     //[HttpPost, ActionName("Delete")]
     //[ValidateAntiForgeryToken]
@@ -211,7 +293,6 @@ internal class WeeksControllerTests
     //    {
     //        return Problem("Entity set 'ApplicationDbContext.Weeks' is empty.");
     //    }
-
 
     //    var week = await _service.GetWeekByIdAsync(id);
     //    var currentUser = await _userManager.GetUserAsync(HttpContext.User);
@@ -226,9 +307,12 @@ internal class WeeksControllerTests
 
     //    return RedirectToAction(nameof(Index));
     //}
+    #endregion
 
+    #region WeekExists(int)
     //private bool WeekExists(int id)
     //{
     //    return _service.GetWeekByIdAsync(id).Result != null;
     //}
+    #endregion
 }
