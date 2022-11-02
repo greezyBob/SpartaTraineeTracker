@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 using TraineeTrackerApp.Models;
 using NuGet.Packaging;
+using TraineeTrackerApp.Utilities;
 
 namespace TraineeTrackerApp.Data
 {
@@ -11,17 +12,18 @@ namespace TraineeTrackerApp.Data
         {
             ApplicationDbContext context = serviceProvider.GetRequiredService<ApplicationDbContext>();
             UserManager<Spartan> userManager = serviceProvider.GetService<UserManager<Spartan>>()!;
-            RoleStore<IdentityRole> roleStore = new RoleStore<IdentityRole>(context);
+            RoleManager<IdentityRole> roleManager = serviceProvider.GetService<RoleManager<IdentityRole>>()!;
 
             context.Database.EnsureCreated();
 
             if (context.Spartans.Any() || context.Weeks.Any()) return;
 
-            //var trainer = new IdentityRole { Name = "Trainer", NormalizedName = "Trainer" };
-            var spartan = new IdentityRole { Name = "Spartan", NormalizedName = "Spartan" };
-
-            //roleStore.CreateAsync(trainer).GetAwaiter().GetResult();
-            roleStore.CreateAsync(spartan).GetAwaiter().GetResult();
+            if (!roleManager.RoleExistsAsync(TheRoles.Role_Trainee).GetAwaiter().GetResult())
+            {
+                roleManager.CreateAsync(new IdentityRole(TheRoles.Role_Admin)).GetAwaiter().GetResult();
+                roleManager.CreateAsync(new IdentityRole(TheRoles.Role_Trainer)).GetAwaiter().GetResult();
+                roleManager.CreateAsync(new IdentityRole(TheRoles.Role_Trainee)).GetAwaiter().GetResult();
+            }
 
             var mark = new Spartan
             {
@@ -55,27 +57,20 @@ namespace TraineeTrackerApp.Data
             userManager.CreateAsync(syed, "Password1!").GetAwaiter().GetResult();
             userManager.CreateAsync(michael, "Password1!").GetAwaiter().GetResult();
 
-            IdentityUserRole<string>[] userRoles = new IdentityUserRole<string>[]
+            userManager.AddToRoleAsync(mark, TheRoles.Role_Trainee).GetAwaiter().GetResult();
+            userManager.AddToRoleAsync(syed, TheRoles.Role_Trainee).GetAwaiter().GetResult();
+            userManager.AddToRoleAsync(michael, TheRoles.Role_Trainee).GetAwaiter().GetResult();
+
+            var admin = new Spartan
             {
-                new IdentityUserRole<string>
-                {
-                    UserId = userManager.GetUserIdAsync(mark).GetAwaiter().GetResult(),
-                    RoleId = roleStore.GetRoleIdAsync(spartan).GetAwaiter().GetResult()
-                },
-                new IdentityUserRole<string>
-                {
-                    UserId = userManager.GetUserIdAsync(syed).GetAwaiter().GetResult(),
-                    RoleId = roleStore.GetRoleIdAsync(spartan).GetAwaiter().GetResult()
-                },
-                new IdentityUserRole<string>
-                {
-                    UserId = userManager.GetUserIdAsync(michael).GetAwaiter().GetResult(),
-                    RoleId = roleStore.GetRoleIdAsync(spartan).GetAwaiter().GetResult()
-                }
+                UserName = "admin@SpartaGlobal.com",
+                Email = "admin@SpartaGlobal.com",
+                EmailConfirmed = true,
+                FirstName = "Joe",
+                LastName = "Bloggs"
             };
 
-            context.UserRoles.AddRange(userRoles);
-            context.SaveChanges();
+            userManager.AddToRoleAsync(admin, TheRoles.Role_Admin).GetAwaiter().GetResult();
 
             if (context.Courses.Any()) return;
 
@@ -175,14 +170,14 @@ namespace TraineeTrackerApp.Data
             context.Weeks.AddRange(weeks);
             context.SaveChanges();
 
-            //mark.Course = courses[0];
-            //mark.Weeks = new List<Week> { weeks[0], weeks[1], weeks[2] };
+            mark.Course = new List<Course> { courses[0] };
+            mark.Weeks = new List<Week> { weeks[0], weeks[1], weeks[2] };
 
-            //syed.Course = courses[0];
-            //syed.Weeks = new List<Week> { weeks[3], weeks[4] };
+            syed.Course = new List<Course> { courses[0] };
+            syed.Weeks = new List<Week> { weeks[3], weeks[4] };
 
-            //michael.Course = courses[0];
-            //syed.Weeks = new List<Week> { weeks[5], weeks[6] };
+            michael.Course = new List<Course> { courses[0] }; 
+            syed.Weeks = new List<Week> { weeks[5], weeks[6] };
 
             context.Spartans.AddRange(mark, syed, michael);
             context.SaveChanges();
