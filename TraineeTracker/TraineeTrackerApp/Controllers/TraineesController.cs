@@ -39,7 +39,7 @@ namespace TraineeTrackerApp.Controllers
         }
 
         // GET: Weeks/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public async Task<IActionResult> Details(string? id)
         {
             if (id == null || _service.GetSpartansAsync().Result == new List<Spartan>())
             {

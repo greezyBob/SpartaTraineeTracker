@@ -13,7 +13,7 @@ namespace TraineeTrackerApp.Services
             _context = context;
         }
 
-        public async Task<Spartan?> GetSpartanByIdAsync(int? id)
+        public async Task<Spartan?> GetSpartanByIdAsync(string? id)
         {
             return await _context.Spartans.FindAsync(id);
         }
