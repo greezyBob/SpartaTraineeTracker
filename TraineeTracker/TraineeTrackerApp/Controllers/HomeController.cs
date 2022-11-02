@@ -15,6 +15,13 @@ public class HomeController : Controller
 
     public IActionResult Index()
     {
+        //if (!User.Identity.IsAuthenticated)
+        //{
+        //    return RedirectToAction("Login", "Identity/Account");
+        //}
+
+        //return RedirectToAction("Index", "Weeks");
+
         return View();
     }
 

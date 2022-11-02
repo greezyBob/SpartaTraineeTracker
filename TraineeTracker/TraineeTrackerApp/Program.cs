@@ -24,6 +24,11 @@ builder.Services.AddDefaultIdentity<Spartan>(options => options.SignIn.RequireCo
 
 builder.Services.AddScoped<IWeekService, WeekService>();
 
+//builder.Services.ConfigureApplicationCookie(config =>
+//{
+//    config.LoginPath = "/login";
+//});
+
 var app = builder.Build();
 
 //using (var scope = app.Services.CreateScope())
