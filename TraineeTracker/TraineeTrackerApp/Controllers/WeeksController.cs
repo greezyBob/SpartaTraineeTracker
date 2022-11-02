@@ -17,19 +17,21 @@ namespace TraineeTrackerApp.Controllers
     public class WeeksController : Controller
     {
         private readonly IWeekService _service;
+        private readonly WeekServiceUserFunctions _userService;
         private UserManager<Spartan> _userManager;
 
-        public WeeksController(IWeekService service, UserManager<Spartan> userManager)
+        public WeeksController(IWeekService service, UserManager<Spartan> userManager, WeekServiceUserFunctions userService)
         {
             _service = service;
             _userManager = userManager;
+            _userService = userService;
         }
 
 
         // GET: Weeks
         public async Task<IActionResult> Index()
         {
-            var currentUser = await _userManager.GetUserAsync(HttpContext.User);
+            var currentUser = await _userService.GetUserAsync(HttpContext.User);
             //var applicationDbContext = _service.Weeks.Include(w => w.Spartan);
             //return View(await applicationDbContext.ToListAsync());
             var weeks = await _service.GetWeeksAsync();
