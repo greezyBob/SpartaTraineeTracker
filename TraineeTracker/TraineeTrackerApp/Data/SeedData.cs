@@ -63,8 +63,8 @@ namespace TraineeTrackerApp.Data
 
             var admin = new Spartan
             {
-                UserName = "admin@SpartaGlobal.com",
-                Email = "admin@SpartaGlobal.com",
+                UserName = "admin@spartaglobal.com",
+                Email = "admin@spartaglobal.com",
                 EmailConfirmed = true,
                 FirstName = "Joe",
                 LastName = "Bloggs"
@@ -83,6 +83,13 @@ namespace TraineeTrackerApp.Data
             };
 
             context.Courses.AddRange(courses);
+            context.SaveChanges();
+
+            mark.Course = new List<Course> { courses[0] };
+            syed.Course = new List<Course> { courses[0] };
+            michael.Course = new List<Course> { courses[0] };
+
+            context.Spartans.AddRange(mark, syed, michael, admin);
             context.SaveChanges();
 
 
@@ -170,17 +177,16 @@ namespace TraineeTrackerApp.Data
             context.Weeks.AddRange(weeks);
             context.SaveChanges();
 
-            mark.Course = new List<Course> { courses[0] };
-            mark.Weeks = new List<Week> { weeks[0], weeks[1], weeks[2] };
+            //mark.Course = new List<Course> { courses[0] };
+            //mark.Weeks = new List<Week> { weeks[0], weeks[1], weeks[2] };
 
-            syed.Course = new List<Course> { courses[0] };
-            syed.Weeks = new List<Week> { weeks[3], weeks[4] };
+            //syed.Course = new List<Course> { courses[0] };
+            //syed.Weeks = new List<Week> { weeks[3], weeks[4] };
 
-            michael.Course = new List<Course> { courses[0] }; 
-            syed.Weeks = new List<Week> { weeks[5], weeks[6] };
+            //michael.Course = new List<Course> { courses[0] };
+            //michael.Weeks = new List<Week> { weeks[5], weeks[6] };
 
-            context.Spartans.AddRange(mark, syed, michael);
-            context.SaveChanges();
+
         }
     }
 }
