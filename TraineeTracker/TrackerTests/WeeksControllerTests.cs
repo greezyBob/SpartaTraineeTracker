@@ -519,49 +519,6 @@ internal class WeeksControllerTests
     #endregion
 
     #region Edit(int, Week)
-    //// POST: Weeks/Edit/5
-    //// To protect from overposting attacks, enable the specific properties you want to bind to.
-    //// For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-    //[HttpPost]
-    //[ValidateAntiForgeryToken]
-    //public async Task<IActionResult> Edit(int id, [Bind("Id,Start,Stop,Continue,WeekStart,GitHubLink,TechnicalSkill,ConsultantSkill")] Week week)
-    //{
-    //    if (id != week.Id)
-    //    {
-    //        return NotFound();
-    //    }
-
-    //    try
-    //    {
-    //        var weekToUpdate = _service.GetWeekByIdAsync(id).Result;
-    //        var currentUser = await _userManager.GetUserAsync(HttpContext.User);
-    //        if (weekToUpdate.SpartanId != currentUser.Id) return Unauthorized(); ;
-    //        weekToUpdate.WeekStart = week.WeekStart;
-    //        weekToUpdate.Start = week.Start ?? weekToUpdate.Start;
-    //        weekToUpdate.Stop = week.Stop ?? weekToUpdate.Stop;
-    //        weekToUpdate.Continue = week.Continue ?? weekToUpdate.Continue;
-    //        weekToUpdate.GitHubLink = week.GitHubLink ?? weekToUpdate.GitHubLink;
-    //        weekToUpdate.TechnicalSkill = week.TechnicalSkill;
-    //        weekToUpdate.ConsultantSkill = week.ConsultantSkill;
-
-    //        await _service.SaveChangesAsync();
-    //    }
-    //    catch (DbUpdateConcurrencyException)
-    //    {
-    //        if (!WeekExists(week.Id))
-    //        {
-    //            return NotFound();
-    //        }
-    //        else
-    //        {
-    //            throw;
-    //        }
-    //    }
-    //    return RedirectToAction(nameof(Index));
-
-    //    ViewData["SpartanId"] = new SelectList(_service.GetSpartansAsync().Result, "Id", "Id", week.SpartanId);
-    //    return View(week);
-    //}
 
     [Test]
     public void Edit_GivenWeekIdDoesntMatchUrlId_ReturnsNotFound()
@@ -623,6 +580,7 @@ internal class WeeksControllerTests
         Assert.That(viewResult.StatusCode, Is.EqualTo(401));
     }
 
+    [Ignore("Method exit never reached")]
     [Test]
     public void Edit_GivenSaveChangesFailsIfWeekDoesntExist_ReturnsNotFound()
     {
@@ -685,103 +643,200 @@ internal class WeeksControllerTests
     #endregion
 
     #region Delete(int)
-    //// GET: Weeks/Delete/5
-    //public async Task<IActionResult> Delete(int? id)
-    //{
-    //    if (id == null || _service.GetWeeksAsync().Result == new List<Week>())
-    //    {
-    //        return NotFound();
-    //    }
 
-    //    var week = await _service.GetWeekByIdAsync(id);
-    //    if (week == null)
-    //    {
-    //        return NotFound();
-    //    }
-
-    //    return View(week);
-    //}
-
-    [Ignore("NotImplemented")]
     [Test]
     public void Delete_GivenWeeksTableIsEmpty_Return404()
     {
-        Assert.That(true);
+        // Arrange
+        var serviceMock = new Mock<IWeekService>();
+        serviceMock.Setup(mock => mock.GetWeeksAsync()).ReturnsAsync(new List<Week>());
+
+        var store = new Mock<IUserStore<Spartan>>();
+        var userMgrMock = new Mock<UserManager<Spartan>>(store.Object, null, null, null, null, null, null, null, null);
+
+        var sut = new WeeksController(serviceMock.Object, userMgrMock.Object);
+        sut.ControllerContext = new ControllerContext
+        {
+            HttpContext = new DefaultHttpContext()
+        };
+
+        // Act
+        var result = sut.Delete(It.IsAny<int>()).Result;
+        var viewResult = (NotFoundResult)result;
+
+        // Assert
+        Assert.That(viewResult.StatusCode, Is.EqualTo(404));
     }
 
-    [Ignore("NotImplemented")]
     [Test]
     public void Delete_GivenInvalidId_Return404()
     {
-        Assert.That(true);
+        // Arrange
+        List<Week> weeks = new List<Week>();
+        weeks.Add(new Week { Id = 1 });
+        weeks.Add(new Week { Id = 2 });
+        weeks.Add(new Week { Id = 3 });
+
+        var serviceMock = new Mock<IWeekService>();
+        serviceMock.Setup(mock => mock.GetWeeksAsync()).ReturnsAsync(weeks);
+        serviceMock.Setup(mock => mock.GetWeekByIdAsync(It.IsAny<int>())).ReturnsAsync(value: null);
+
+
+        var store = new Mock<IUserStore<Spartan>>();
+        var userMgrMock = new Mock<UserManager<Spartan>>(store.Object, null, null, null, null, null, null, null, null);
+
+        var sut = new WeeksController(serviceMock.Object, userMgrMock.Object);
+        sut.ControllerContext = new ControllerContext
+        {
+            HttpContext = new DefaultHttpContext()
+        };
+
+        // Act
+        var result = sut.Delete(It.IsAny<int>()).Result;
+        var viewResult = (NotFoundResult)result;
+
+        // Assert
+        Assert.That(viewResult.StatusCode, Is.EqualTo(404));
     }
 
-    [Ignore("NotImplemented")]
     [Test]
     public void Delete_GivenValidId_ReturnsWeek()
     {
-        Assert.That(true);
+        // Arrange
+        Spartan spartan = new Spartan() { Id = Guid.NewGuid().ToString() };
+
+        List<Week> weeks = new List<Week>();
+        weeks.Add(new Week { SpartanId = spartan.Id });
+        weeks.Add(new Week { SpartanId = spartan.Id });
+        weeks.Add(new Week
+        {
+            SpartanId = spartan.Id,
+            Start = "Listening Babytron",
+            Stop = "Unit testing"
+        });
+        weeks.Add(new Week { SpartanId = Guid.NewGuid().ToString() });
+        weeks.Add(new Week { SpartanId = Guid.NewGuid().ToString() });
+
+        var serviceMock = new Mock<IWeekService>();
+        serviceMock.Setup(mock => mock.GetWeeksAsync()).ReturnsAsync(weeks);
+        serviceMock.Setup(mock => mock.GetWeekByIdAsync(2)).ReturnsAsync(weeks[2]);
+
+
+        var store = new Mock<IUserStore<Spartan>>();
+        var userMgrMock = new Mock<UserManager<Spartan>>(store.Object, null, null, null, null, null, null, null, null);
+        userMgrMock.Setup(mock => mock.GetUserAsync(It.IsAny<ClaimsPrincipal>())).ReturnsAsync(spartan);
+
+        var sut = new WeeksController(serviceMock.Object, userMgrMock.Object);
+        sut.ControllerContext = new ControllerContext
+        {
+            HttpContext = new DefaultHttpContext()
+        };
+
+        // Act
+        var result = sut.Delete(2).Result;
+        var viewResult = (ViewResult)result;
+        var viewData = (Week)viewResult.ViewData.Model;
+
+        // Assert
+        Assert.That(viewData.SpartanId, Is.EqualTo(spartan.Id));
+        Assert.That(viewData.Start, Is.EqualTo(weeks[2].Start));
+        Assert.That(viewData.Stop, Is.EqualTo(weeks[2].Stop));
     }
     #endregion
 
     #region DeleteConfirmed(int)
-    //// POST: Weeks/Delete/5
-    //[HttpPost, ActionName("Delete")]
-    //[ValidateAntiForgeryToken]
-    //public async Task<IActionResult> DeleteConfirmed(int id)
-    //{
-    //    if (_service.GetWeeksAsync().Result == new List<Week>())
-    //    {
-    //        return Problem("Entity set 'ApplicationDbContext.Weeks' is empty.");
-    //    }
 
-    //    var week = await _service.GetWeekByIdAsync(id);
-    //    var currentUser = await _userManager.GetUserAsync(HttpContext.User);
-    //    if (week.SpartanId != currentUser.Id)
-    //    {
-    //        return Unauthorized();
-    //    }
-    //    if (week != null)
-    //    {
-    //        await _service.RemoveWeekAsync(week);
-    //    }
-
-    //    return RedirectToAction(nameof(Index));
-    //}
-
-    [Ignore("NotImplemented")]
     [Test]
-    public void Delete_ReturnsTypeOfViewResultIndex()
+    public void Delete_ReturnsRedirectToIndex()
     {
-        Assert.That(true);
+        // Arrange
+        Spartan spartan = new Spartan() { Id = Guid.NewGuid().ToString() };
+
+        Week week = new Week
+        {
+            SpartanId = spartan.Id,
+            Spartan = spartan
+        };
+
+        var serviceMock = new Mock<IWeekService>();
+        serviceMock.Setup(mock => mock.GetWeekByIdAsync(week.Id)).ReturnsAsync(week);
+
+        var store = new Mock<IUserStore<Spartan>>();
+        var userMgrMock = new Mock<UserManager<Spartan>>(store.Object, null, null, null, null, null, null, null, null);
+        userMgrMock.Setup(mock => mock.GetUserAsync(It.IsAny<ClaimsPrincipal>())).ReturnsAsync(spartan);
+
+        var sut = new WeeksController(serviceMock.Object, userMgrMock.Object);
+        sut.ControllerContext = new ControllerContext
+        {
+            HttpContext = new DefaultHttpContext()
+        };
+
+        // Act
+        var result = sut.DeleteConfirmed(week.Id).Result;
+        var resultType = (RedirectToActionResult)result;
+
+        // Assert
+        Assert.That(resultType.ActionName, Is.EqualTo("Index"));
     }
 
-    [Ignore("NotImplemented")]
     [Test]
-    public void Delete_GivenValidId_ReturnsIndexView()
+    public void Delete_GivenWeekDoesNotBelongToUser_ReturnsUnauthorized()
     {
-        Assert.That(true);
+        // Arrange
+        Spartan spartan = new Spartan() { Id = Guid.NewGuid().ToString() };
+
+        List<Week> weeks = new List<Week>();
+        weeks.Add(new Week { SpartanId = spartan.Id });
+        weeks.Add(new Week { SpartanId = spartan.Id });
+        weeks.Add(new Week { SpartanId = spartan.Id });
+        weeks.Add(new Week { SpartanId = Guid.NewGuid().ToString() });
+        weeks.Add(new Week { SpartanId = Guid.NewGuid().ToString() });
+
+        var serviceMock = new Mock<IWeekService>();
+        serviceMock.Setup(mock => mock.GetWeeksAsync()).ReturnsAsync(weeks);
+        serviceMock.Setup(mock => mock.GetWeekByIdAsync(It.IsAny<int>())).ReturnsAsync(weeks[3]);
+
+
+        var store = new Mock<IUserStore<Spartan>>();
+        var userMgrMock = new Mock<UserManager<Spartan>>(store.Object, null, null, null, null, null, null, null, null);
+        userMgrMock.Setup(mock => mock.GetUserAsync(It.IsAny<ClaimsPrincipal>())).ReturnsAsync(spartan);
+
+        var sut = new WeeksController(serviceMock.Object, userMgrMock.Object);
+        sut.ControllerContext = new ControllerContext
+        {
+            HttpContext = new DefaultHttpContext()
+        };
+
+        // Act
+        var result = sut.DeleteConfirmed(It.IsAny<int>()).Result;
+        var viewResult = (UnauthorizedResult)result;
+
+        // Assert
+        Assert.That(viewResult.StatusCode, Is.EqualTo(401));
     }
 
-    [Ignore("NotImplemented")]
     [Test]
-    public void Delete_GivenInvalidId_Returns404()
+    public void Delete_GivenInvalidId_ReturnsProblem()
     {
-        Assert.That(true);
-    }
-    #endregion
+        // Arrange
+        var serviceMock = new Mock<IWeekService>();
+        serviceMock.Setup(mock => mock.GetWeeksAsync()).ReturnsAsync(new List<Week>());
 
-    #region WeekExists(int)
-    //private bool WeekExists(int id)
-    //{
-    //    return _service.GetWeekByIdAsync(id).Result != null;
-    //}
+        var store = new Mock<IUserStore<Spartan>>();
+        var userMgrMock = new Mock<UserManager<Spartan>>(store.Object, null, null, null, null, null, null, null, null);
 
-    [Ignore("NotImplemented")]
-    [Test]
-    public void WeekExists_ReturnsTypeOfBool()
-    {
-        Assert.That(true);
+        var sut = new WeeksController(serviceMock.Object, userMgrMock.Object);
+        sut.ControllerContext = new ControllerContext
+        {
+            HttpContext = new DefaultHttpContext()
+        };
+
+        // Act
+        var result = sut.DeleteConfirmed(It.IsAny<int>()).Result;
+        var viewResult = (ObjectResult)result;
+
+        // Assert
+        //Assert.That(viewResult., Is.EqualTo(401));
     }
     #endregion
 }
