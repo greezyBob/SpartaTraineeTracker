@@ -25,6 +25,14 @@ public class HomeController : Controller
             var spartans = await _traineeService.GetSpartansAsync();
             return View("~/Views/Admin/AdminIndex.cshtml", spartans);
         }
+        else if (User.IsInRole("Trainee"))
+        {
+            return RedirectToAction("Index", "Weeks");
+        }
+        else if (User.IsInRole("Trainer"))
+        {
+            return RedirectToAction("Index", "Trainees");
+        }
         return View();
     }
 
