@@ -28,20 +28,33 @@
                 <textarea asp-for="Continue" class="form-control card-body"></textarea>
                 <span asp-validation-for="Continue" class="text-danger"></span>
             </div>
-            <div class="form-group card border-dark mb-4 col-md-6">
-                <label asp-for="WeekStart" class="control-label card-header spartapink text-white fs-4"></label>
-                <input asp-for="WeekStart" class="form-control card-body" />
-                <span asp-validation-for="WeekStart" class="text-danger"></span>
+            <div class="d-flex justify-content-start">
+                <div class="flex-column">
+                    <div class="form-group card border-dark mb-4">
+                        <label asp-for="WeekStart" class="control-label card-header spartapink text-white fs-4"></label>
+                        <input asp-for="WeekStart" class="form-control card-body" />
+                        <span asp-validation-for="WeekStart" class="text-danger"></span>
+                    </div>
+                    <div class="form-group card border-dark mb-4">
+                        <label asp-for="TechnicalSkill" class="control-label card-header spartapink text-white fs-4"></label>
+                        @Html.DropDownListFor(w => w.TechnicalSkill,
+                        new SelectList(Enum.GetValues(typeof(Proficiency))), "Select technical skill level")
+                    </div>
+                </div>
+                <div class="d-flex flex-column ms-4">
+                    <div class="form-group card border-dark mb-4">
+                        <label asp-for="GitHubLink" class="control-label card-header spartapink text-white fs-4"></label>
+                        <input asp-for="GitHubLink" class="form-control card-body" />
+                        <span asp-validation-for="GitHubLink" class="text-danger"></span>
+                    </div>
+                    
+                    <div class="form-group card border-dark mb-4">
+                        <label asp-for="ConsultantSkill" class="control-label card-header spartapink text-white fs-4"></label>
+                        @Html.DropDownListFor(w => w.ConsultantSkill,
+                        new SelectList(Enum.GetValues(typeof(Proficiency))), "Select consultant skill level")            
+                    </div>
+                </div>
             </div>
-            <div class="form-group card border-dark mb-4 col-md-6">
-                <label asp-for="GitHubLink" class="control-label card-header spartapink text-white fs-4"></label>
-                <input asp-for="GitHubLink" class="form-control card-body" />
-                <span asp-validation-for="GitHubLink" class="text-danger"></span>
-            </div>
-            @Html.DropDownListFor(w => w.TechnicalSkill,
-            new SelectList(Enum.GetValues(typeof(Proficiency))), "Select technical skill level")
-            @Html.DropDownListFor(w => w.ConsultantSkill,
-            new SelectList(Enum.GetValues(typeof(Proficiency))), "Select consultant skill level")            
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
             </div>
