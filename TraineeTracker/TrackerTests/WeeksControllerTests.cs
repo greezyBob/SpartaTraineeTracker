@@ -6,6 +6,7 @@ using Moq;
 using TraineeTrackerApp.Services;
 using TraineeTrackerApp.Controllers;
 using System.Security.Claims;
+using Microsoft.EntityFrameworkCore.ChangeTracking.Internal;
 
 namespace TrackerTests;
 
@@ -14,16 +15,6 @@ internal class WeeksControllerTests
     // Note add tests to check logged in user privileges
 
     #region Index()
-    //public async Task<IActionResult> Index()
-    //{
-    //    var currentUser = await _userManager.GetUserAsync(HttpContext.User);
-    //    //var applicationDbContext = _service.Weeks.Include(w => w.Spartan);
-    //    //return View(await applicationDbContext.ToListAsync());
-    //    var weeks = await _service.GetWeeksAsync();
-    //    var filteredWeeks = weeks.Where(w => w.SpartanId == currentUser.Id)
-    //        .OrderBy(w => w.WeekStart.Date).ToList();
-    //    return View(filteredWeeks);
-    //}
 
     [Test]
     public async Task Index_ReturnsTypeOfListWeeks()
@@ -38,15 +29,17 @@ internal class WeeksControllerTests
 
         var sut = new WeeksController(serviceMock.Object, userMgrMock.Object);
         sut.ControllerContext = new ControllerContext
-         {
-             HttpContext = new DefaultHttpContext()
-         };
+        {
+            HttpContext = new DefaultHttpContext()
+        };
 
         // Act
-        var result = await sut.Index();
+        var result = sut.Index().Result;
+        var viewResult = (ViewResult)result;
+        var viewDataList = (List<Week>)viewResult.ViewData.Model;
 
         // Assert
-        Assert.That(result, Is.TypeOf<ViewResult>());
+        Assert.That(viewDataList, Is.TypeOf<List<Week>>());
     }
 
     [Test]
@@ -59,11 +52,11 @@ internal class WeeksControllerTests
         };
 
         List<Week> weeks = new List<Week>();
-        weeks.Add(new Week{ SpartanId = user.Id });
-        weeks.Add(new Week{ SpartanId = user.Id });
-        weeks.Add(new Week{ SpartanId = user.Id });
-        weeks.Add(new Week{ SpartanId = Guid.NewGuid().ToString() });
-        weeks.Add(new Week{ SpartanId = Guid.NewGuid().ToString() });
+        weeks.Add(new Week { SpartanId = user.Id });
+        weeks.Add(new Week { SpartanId = user.Id });
+        weeks.Add(new Week { SpartanId = user.Id });
+        weeks.Add(new Week { SpartanId = Guid.NewGuid().ToString() });
+        weeks.Add(new Week { SpartanId = Guid.NewGuid().ToString() });
 
         var serviceMock = new Mock<IWeekService>();
         serviceMock.Setup(mock => mock.GetWeeksAsync()).ReturnsAsync(weeks);
@@ -127,53 +120,177 @@ internal class WeeksControllerTests
     #endregion
 
     #region Details(int)
-    //// GET: Weeks/Details/5
-    //public async Task<IActionResult> Details(int? id)
-    //{
-    //    if (id == null || _service.GetWeeksAsync().Result == new List<Week>())
-    //    {
-    //        return NotFound();
-    //    }
 
-    //    //var week = await _service.Weeks
-    //    //    .Include(w => w.Spartan)
-    //    //    .FirstOrDefaultAsync(m => m.Id == id);
-    //    var week = await _service.GetWeekByIdAsync(id);
-    //    if (week == null)
-    //    {
-    //        return NotFound();
-    //    }
-
-    //    var currentUser = await _userManager.GetUserAsync(HttpContext.User);
-
-    //    if (week.SpartanId != currentUser.Id)
-    //    {
-    //        return Unauthorized();
-    //    }
-
-    //    return View(week);
-    //}
-
-    [Ignore("NotImplemented")]
     [Test]
     public void Details_ReturnsTypeOfWeek()
     {
-        Assert.That(true);
+        // Arrange
+        Spartan spartan = new Spartan() { Id = Guid.NewGuid().ToString() };
+
+        List<Week> weeks = new List<Week>();
+        weeks.Add(new Week { SpartanId = spartan.Id });
+
+        var serviceMock = new Mock<IWeekService>();
+        serviceMock.Setup(mock => mock.GetWeeksAsync()).ReturnsAsync(weeks);
+        serviceMock.Setup(mock => mock.GetWeekByIdAsync(It.IsAny<int>())).ReturnsAsync(weeks[0]);
+
+
+        var store = new Mock<IUserStore<Spartan>>();
+        var userMgrMock = new Mock<UserManager<Spartan>>(store.Object, null, null, null, null, null, null, null, null);
+        userMgrMock.Setup(mock => mock.GetUserAsync(It.IsAny<ClaimsPrincipal>())).ReturnsAsync(spartan);
+
+        var sut = new WeeksController(serviceMock.Object, userMgrMock.Object);
+        sut.ControllerContext = new ControllerContext
+        {
+            HttpContext = new DefaultHttpContext()
+        };
+
+        // Act
+        var result = sut.Details(It.IsAny<int>()).Result;
+        var viewResult = (ViewResult)result;
+        var viewData = (Week)viewResult.ViewData.Model;
+
+        // Assert
+        Assert.That(viewData, Is.TypeOf<Week>());
     }
 
-    [Ignore("NotImplemented")]
     [Test]
     public void Details_GivenValidWeekId_ReturnsWeek()
     {
-        Assert.That(true);
+        // Arrange
+        Spartan spartan = new Spartan() { Id = Guid.NewGuid().ToString() };
+
+        List<Week> weeks = new List<Week>();
+        weeks.Add(new Week { SpartanId = spartan.Id });
+        weeks.Add(new Week { SpartanId = spartan.Id });
+        weeks.Add(new Week
+        {
+            SpartanId = spartan.Id,
+            Start = "Listening Babytron",
+            Stop = "Unit testing"
+        });
+        weeks.Add(new Week { SpartanId = Guid.NewGuid().ToString() });
+        weeks.Add(new Week { SpartanId = Guid.NewGuid().ToString() });
+
+        var serviceMock = new Mock<IWeekService>();
+        serviceMock.Setup(mock => mock.GetWeeksAsync()).ReturnsAsync(weeks);
+        serviceMock.Setup(mock => mock.GetWeekByIdAsync(2)).ReturnsAsync(weeks[2]);
+
+
+        var store = new Mock<IUserStore<Spartan>>();
+        var userMgrMock = new Mock<UserManager<Spartan>>(store.Object, null, null, null, null, null, null, null, null);
+        userMgrMock.Setup(mock => mock.GetUserAsync(It.IsAny<ClaimsPrincipal>())).ReturnsAsync(spartan);
+
+        var sut = new WeeksController(serviceMock.Object, userMgrMock.Object);
+        sut.ControllerContext = new ControllerContext
+        {
+            HttpContext = new DefaultHttpContext()
+        };
+
+        // Act
+        var result = sut.Details(2).Result;
+        var viewResult = (ViewResult)result;
+        var viewData = (Week)viewResult.ViewData.Model;
+
+        // Assert
+        Assert.That(viewData.SpartanId, Is.EqualTo(spartan.Id));
+        Assert.That(viewData.Start, Is.EqualTo(weeks[2].Start));
+        Assert.That(viewData.Stop, Is.EqualTo(weeks[2].Stop));
+
     }
 
-    [Ignore("NotImplemented")]
     [Test]
-    public void Details_GivenInvalidWeekId_Returns404NotFound()
+    public void Details_GivenWeeksUnpopulated_Returns404NotFound()
     {
-        Assert.That(true);
+        // Arrange
+        var serviceMock = new Mock<IWeekService>();
+        serviceMock.Setup(mock => mock.GetWeeksAsync()).ReturnsAsync(It.IsAny<List<Week>>());
+
+        var store = new Mock<IUserStore<Spartan>>();
+        var userMgrMock = new Mock<UserManager<Spartan>>(store.Object, null, null, null, null, null, null, null, null);
+
+        var sut = new WeeksController(serviceMock.Object, userMgrMock.Object);
+        sut.ControllerContext = new ControllerContext
+        {
+            HttpContext = new DefaultHttpContext()
+        };
+
+        // Act
+        var result = sut.Details(It.IsAny<int>()).Result;
+        var viewResult = (NotFoundResult)result;
+
+        // Assert
+        Assert.That(viewResult.StatusCode, Is.EqualTo(404));
     }
+
+    [Test]
+    public void Details_GivenWeekIsNotInDB_Returns404NotFound()
+    {
+        // Arrange
+        List<Week> weeks = new List<Week>();
+        weeks.Add(new Week { Id = 1 });
+        weeks.Add(new Week { Id = 2 });
+        weeks.Add(new Week { Id = 3 });
+
+        var serviceMock = new Mock<IWeekService>();
+        serviceMock.Setup(mock => mock.GetWeeksAsync()).ReturnsAsync(weeks);
+        serviceMock.Setup(mock => mock.GetWeekByIdAsync(It.IsAny<int>())).ReturnsAsync(value: null);
+
+
+        var store = new Mock<IUserStore<Spartan>>();
+        var userMgrMock = new Mock<UserManager<Spartan>>(store.Object, null, null, null, null, null, null, null, null);
+
+        var sut = new WeeksController(serviceMock.Object, userMgrMock.Object);
+        sut.ControllerContext = new ControllerContext
+        {
+            HttpContext = new DefaultHttpContext()
+        };
+
+        // Act
+        var result = sut.Details(It.IsAny<int>()).Result;
+        var viewResult = (NotFoundResult)result;
+
+        // Assert
+        Assert.That(viewResult.StatusCode, Is.EqualTo(404));
+    }
+
+    [Test]
+    public void Details_GivenWeekCreatedByOtherTrainee_ReturnsUnauthorized()
+    {
+        // Arrange
+        Spartan spartan = new Spartan() { Id = Guid.NewGuid().ToString() };
+
+        List<Week> weeks = new List<Week>();
+        weeks.Add(new Week { SpartanId = spartan.Id });
+        weeks.Add(new Week { SpartanId = spartan.Id });
+        weeks.Add(new Week { SpartanId = spartan.Id });
+        weeks.Add(new Week { SpartanId = Guid.NewGuid().ToString() });
+        weeks.Add(new Week { SpartanId = Guid.NewGuid().ToString() });
+
+        var serviceMock = new Mock<IWeekService>();
+        serviceMock.Setup(mock => mock.GetWeeksAsync()).ReturnsAsync(weeks);
+        serviceMock.Setup(mock => mock.GetWeekByIdAsync(It.IsAny<int>())).ReturnsAsync(weeks[3]);
+
+
+        var store = new Mock<IUserStore<Spartan>>();
+        var userMgrMock = new Mock<UserManager<Spartan>>(store.Object, null, null, null, null, null, null, null, null);
+        userMgrMock.Setup(mock => mock.GetUserAsync(It.IsAny<ClaimsPrincipal>())).ReturnsAsync(spartan);
+
+        var sut = new WeeksController(serviceMock.Object, userMgrMock.Object);
+        sut.ControllerContext = new ControllerContext
+        {
+            HttpContext = new DefaultHttpContext()
+        };
+
+        // Act
+        var result = sut.Details(It.IsAny<int>()).Result;
+        var viewResult = (UnauthorizedResult)result;
+
+        // Assert
+        Assert.That(viewResult.StatusCode, Is.EqualTo(401));
+
+    }
+
     #endregion
 
     #region Create()
