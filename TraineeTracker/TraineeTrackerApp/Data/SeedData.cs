@@ -73,7 +73,7 @@ namespace TraineeTrackerApp.Data
             userManager.CreateAsync(syed, "Password1!").GetAwaiter().GetResult();
             userManager.CreateAsync(michael, "Password1!").GetAwaiter().GetResult();
 
-            userManager.AddToRoleAsync(mark, TheRoles.Role_Trainee).GetAwaiter().GetResult();
+            userManager.AddToRoleAsync(mark, TheRoles.Role_Trainer).GetAwaiter().GetResult();
             userManager.AddToRoleAsync(syed, TheRoles.Role_Trainee).GetAwaiter().GetResult();
             userManager.AddToRoleAsync(michael, TheRoles.Role_Trainee).GetAwaiter().GetResult();
 
@@ -99,8 +99,8 @@ namespace TraineeTrackerApp.Data
                     WeekStart = new DateTime(2022,9,12),
                     TechnicalSkill = Proficiency.PartiallySkilled,
                     ConsultantSkill = Proficiency.LowSkilled,
-                    Spartan = mark,
-                    SpartanId = mark.Id
+                    Spartan = syed,
+                    SpartanId = syed.Id
                 },
                 new Week
                 {
@@ -110,8 +110,8 @@ namespace TraineeTrackerApp.Data
                     WeekStart = new DateTime(2022,9,13),
                     TechnicalSkill = Proficiency.PartiallySkilled,
                     ConsultantSkill = Proficiency.LowSkilled,
-                    Spartan = mark,
-                    SpartanId = mark.Id
+                    Spartan = syed,
+                    SpartanId = syed.Id
                 },
                 new Week
                 {
@@ -121,8 +121,8 @@ namespace TraineeTrackerApp.Data
                     WeekStart = new DateTime(2022,9,14),
                     TechnicalSkill = Proficiency.PartiallySkilled,
                     ConsultantSkill = Proficiency.LowSkilled,
-                    Spartan = mark,
-                    SpartanId = mark.Id
+                    Spartan = michael,
+                    SpartanId = michael.Id
                 },
                 new Week
                 {
@@ -160,7 +160,7 @@ namespace TraineeTrackerApp.Data
                 new Week
                 {
                     Start = "Learning stuff",
-                    Stop = "Having Nazis in my background",
+                    Stop = "Having zombies in my background",
                     Continue = "Practicing MVC",
                     WeekStart = new DateTime(2022,9,13),
                     TechnicalSkill = Proficiency.Skilled,
