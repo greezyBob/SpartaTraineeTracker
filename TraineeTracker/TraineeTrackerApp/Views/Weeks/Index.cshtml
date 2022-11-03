@@ -6,34 +6,54 @@
 <div class="mt-auto mb-auto">
     <h1>Index</h1>
 
-<p>
+    <p>
         <a asp-action="Create" class="btn spartapink indexBtn">Create New</a>
-</p>
-   
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.WeekStart)
-            </th>          
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
+    </p>
+
+    <table class="table">
+        <thead>
             <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.WeekStart)
-                </td>
-                <td class="text-end">
-                    <div>                        
-                        <a class="btn spartapink indexBtn" asp-action="Details" asp-route-id="@item.Id">Details</a>
-                        <a class="btn spartapink indexBtn" asp-action="Edit" asp-route-id="@item.Id">Edit</a>
-                            <a class="btn spartapink indexBtn indexBtnDanger" data-bs-toggle="modal" data-bs-target="#exampleModal">Delete</a>
-                    </div>
-                </td>
+                <th>
+                    @Html.DisplayNameFor(model => model.WeekStart)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.TechnicalSkill)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.ConsultantSkill)
+                </th>
+                <th></th>
             </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.WeekStart)
+                    </td>
+                    <td>
+                        <div class="badge rounded-pill" id="technical">
+                            <div id="technicalValue">
+                                @Html.DisplayFor(modelItem => item.TechnicalSkill)
+                            </div>
+                        </div>                       
+                    </td>
+                    <td>
+                        <div id="consultant" class="badge rounded-pill">
+                            <div id="consultantValue">
+                                @Html.DisplayFor(modelItem => item.ConsultantSkill)
+                            </div>
+                        </div>
+                    </td>
+                    <td class="text-end">
+                        <div>
+                            <a class="btn spartapink indexBtn" asp-action="Details" asp-route-id="@item.Id">Details</a>
+                            <a class="btn btn-primary" asp-action="Edit" asp-route-id="@item.Id">Edit</a>
+                            <a class="btn spartapink indexBtn indexBtnDanger" data-bs-toggle="modal" data-bs-target="#exampleModal">Delete</a>
+                        </div>
+                    </td>
+                </tr>
                 <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                     <div class="modal-dialog modal-dialog-centered">
                         <div class="modal-content">
@@ -50,7 +70,9 @@
                         </div>
                     </div>
                 </div>
-        }
-    </tbody>
-</table>
+            }
+        </tbody>
+    </table>
 </div>
+
+<script src="~/js/weekDetails.js"></script>
