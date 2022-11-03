@@ -18,14 +18,9 @@ public class HomeController : Controller
         _traineeService = traineeService;
     }
 
-    public async Task<IActionResult> Index()
+    public IActionResult Index()
     {
-        if (User.IsInRole("Admin"))
-        {
-            var spartans = await _traineeService.GetSpartansAsync();
-            return View("~/Views/Admin/AdminIndex.cshtml", spartans);
-        }
-        return View();
+        return View("Index");
     }
 
     public IActionResult Privacy()
