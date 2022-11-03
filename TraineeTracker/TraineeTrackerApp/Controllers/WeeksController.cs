@@ -66,6 +66,7 @@ namespace TraineeTrackerApp.Controllers
         }
 
         // GET: Weeks/Create
+        [Authorize(Roles = "Trainee")]
         public IActionResult Create()
         {
             //ViewData["SpartanId"] = new SelectList(_service.GetSpartansAsync().Result, "Id", "Id");
@@ -75,6 +76,8 @@ namespace TraineeTrackerApp.Controllers
         // POST: Weeks/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+
+        [Authorize(Roles = "Trainee")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Start,Stop,Continue,WeekStart,GitHubLink,TechnicalSkill,ConsultantSkill")] Week week)

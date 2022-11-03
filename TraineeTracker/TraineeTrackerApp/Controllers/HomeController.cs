@@ -1,22 +1,30 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 using TraineeTrackerApp.Models;
+using TraineeTrackerApp.Services;
 
 namespace TraineeTrackerApp.Controllers;
 
 public class HomeController : Controller
 {
     private readonly ILogger<HomeController> _logger;
+    private readonly ITraineeService _traineeService;
 
-    public HomeController(ILogger<HomeController> logger)
+    public HomeController(ILogger<HomeController> logger, ITraineeService traineeService)
     {
         _logger = logger;
+        _traineeService = traineeService;
     }
 
-    public IActionResult Index()
+    public async Task<IActionResult> Index()
     {
-
+        if (User.IsInRole("Admin"))
+        {
+            var spartans = await _traineeService.GetSpartansAsync();
+            return View("~/Views/Admin/AdminIndex.cshtml", spartans);
+        }
         return View();
     }
 
