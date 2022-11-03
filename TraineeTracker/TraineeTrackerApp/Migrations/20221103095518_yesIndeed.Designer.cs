@@ -12,8 +12,8 @@ using TraineeTrackerApp.Data;
 namespace TraineeTrackerApp.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20221102163415_lmao")]
-    partial class lmao
+    [Migration("20221103095518_yesIndeed")]
+    partial class yesIndeed
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
