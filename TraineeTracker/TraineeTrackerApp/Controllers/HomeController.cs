@@ -20,18 +20,18 @@ public class HomeController : Controller
 
     public IActionResult Index()
     {
-        if (User.IsInRole("Admin"))
-        {
-            var spartans = await _traineeService.GetSpartansAsync();
-            return View("~/Views/Admin/AdminIndex.cshtml", spartans);
-        }
-        else if (User.IsInRole("Trainee"))
+        
+        if (User.IsInRole("Trainee"))
         {
             return RedirectToAction("Index", "Weeks");
         }
         else if (User.IsInRole("Trainer"))
         {
             return RedirectToAction("Index", "Trainees");
+        }
+        else if (User.IsInRole("Admin"))
+        {
+            return RedirectToAction("Index", "Spartans");
         }
         return View();
     }
