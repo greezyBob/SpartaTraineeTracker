@@ -115,14 +115,6 @@ namespace TraineeTrackerApp.Areas.Identity.Pages.Account
             [DisplayName("Last Name")]
             public string LastName { get; set; }
 
-            [DisplayName("Address 1")]
-            public string? Address1 { get; set; }
-
-            [DisplayName("Address 2")]
-            public string? Address2 { get; set; }
-
-            [DisplayName("Post Code")]
-            public string? PostCode { get; set; }
             [DisplayName("Phone Number")]
             public string? PhoneNumber { get; set; }
 
@@ -154,9 +146,6 @@ namespace TraineeTrackerApp.Areas.Identity.Pages.Account
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
                 user.FirstName = Input.FirstName;
                 user.LastName = Input.LastName;
-                user.Address1 = Input.Address1;
-                user.Address2 = Input.Address2;
-                user.PostCode = Input.PostCode;
                 user.PhoneNumber = Input.PhoneNumber;
 
                 var result = await _userManager.CreateAsync(user, Input.Password);
