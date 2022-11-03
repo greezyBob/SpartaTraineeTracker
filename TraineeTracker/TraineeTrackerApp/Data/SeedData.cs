@@ -82,8 +82,8 @@ namespace TraineeTrackerApp.Data
                 UserName = "admin@spartaglobal.com",
                 Email = "admin@spartaglobal.com",
                 EmailConfirmed = true,
-                FirstName = "Joe",
-                LastName = "Bloggs"
+                FirstName = "Admin",
+                LastName = "Admin"
             };
 
             userManager.CreateAsync(admin, "Admin1!").GetAwaiter().GetResult();

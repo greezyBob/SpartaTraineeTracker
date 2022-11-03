@@ -27,5 +27,10 @@ namespace TraineeTrackerApp.Services
         {
             return await _context.Weeks.Where(w => w.SpartanId == id).ToListAsync();
         }
+        public async Task RemoveSpartanAsync(Spartan spartan)
+        {
+            _context.Spartans.Remove(spartan);
+            await _context.SaveChangesAsync();
+        }
     }
 }
