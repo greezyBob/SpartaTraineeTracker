@@ -16,14 +16,27 @@ namespace TraineeTrackerApp.Data
 
             context.Database.EnsureCreated();
 
-            if (context.Spartans.Any() || context.Weeks.Any()) return;
-
             if (!roleManager.RoleExistsAsync(TheRoles.Role_Trainee).GetAwaiter().GetResult())
             {
                 roleManager.CreateAsync(new IdentityRole(TheRoles.Role_Admin)).GetAwaiter().GetResult();
                 roleManager.CreateAsync(new IdentityRole(TheRoles.Role_Trainer)).GetAwaiter().GetResult();
                 roleManager.CreateAsync(new IdentityRole(TheRoles.Role_Trainee)).GetAwaiter().GetResult();
             }
+
+            if (context.Courses.Any()) return;
+
+            Course[] courses = new Course[]
+            {
+                new Course { Title = "C# Developer" },
+                new Course { Title = "C# SDET" },
+                new Course { Title = "Java Developer" },
+                new Course { Title = "Java SDET" },
+            };
+
+            context.Courses.AddRange(courses);
+            context.SaveChanges();
+
+            if (context.Spartans.Any() || context.Weeks.Any()) return;
 
             var mark = new Spartan
             {
@@ -32,7 +45,8 @@ namespace TraineeTrackerApp.Data
                 EmailConfirmed = true,
                 FirstName = "Mark",
                 LastName = "Pollard",
-                StartDate = new DateTime(2022, 9, 12)
+                StartDate = new DateTime(2022, 9, 12),
+                Course = new List<Course> { courses[0] }
             };
             var syed = new Spartan
             {
@@ -41,7 +55,8 @@ namespace TraineeTrackerApp.Data
                 EmailConfirmed = true,
                 FirstName = "Syed",
                 LastName = "Ahmed",
-                StartDate = new DateTime(2022, 9, 12)
+                StartDate = new DateTime(2022, 9, 12),
+                Course = new List<Course> { courses[0] }
             };
             var michael = new Spartan
             {
@@ -50,7 +65,8 @@ namespace TraineeTrackerApp.Data
                 EmailConfirmed = true,
                 FirstName = "Michael",
                 LastName = "Davies",
-                StartDate = new DateTime(2022, 9, 12)
+                StartDate = new DateTime(2022, 9, 12),
+                Course = new List<Course> { courses[0] }
             };
 
             userManager.CreateAsync(mark, "Password1!").GetAwaiter().GetResult();
@@ -70,28 +86,8 @@ namespace TraineeTrackerApp.Data
                 LastName = "Bloggs"
             };
 
+            userManager.CreateAsync(admin, "Admin1!").GetAwaiter().GetResult();
             userManager.AddToRoleAsync(admin, TheRoles.Role_Admin).GetAwaiter().GetResult();
-
-            if (context.Courses.Any()) return;
-
-            Course[] courses = new Course[]
-            {
-                new Course { Title = "C# Developer" },
-                new Course { Title = "C# SDET" },
-                new Course { Title = "Java Developer" },
-                new Course { Title = "Java SDET" },
-            };
-
-            context.Courses.AddRange(courses);
-            context.SaveChanges();
-
-            mark.Course = new List<Course> { courses[0] };
-            syed.Course = new List<Course> { courses[0] };
-            michael.Course = new List<Course> { courses[0] };
-
-            context.Spartans.AddRange(mark, syed, michael, admin);
-            context.SaveChanges();
-
 
             Week[] weeks = new Week[]
             {
@@ -176,16 +172,6 @@ namespace TraineeTrackerApp.Data
 
             context.Weeks.AddRange(weeks);
             context.SaveChanges();
-
-            //mark.Course = new List<Course> { courses[0] };
-            //mark.Weeks = new List<Week> { weeks[0], weeks[1], weeks[2] };
-
-            //syed.Course = new List<Course> { courses[0] };
-            //syed.Weeks = new List<Week> { weeks[3], weeks[4] };
-
-            //michael.Course = new List<Course> { courses[0] };
-            //michael.Weeks = new List<Week> { weeks[5], weeks[6] };
-
 
         }
     }

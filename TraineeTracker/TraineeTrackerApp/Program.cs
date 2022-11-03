@@ -22,6 +22,7 @@ builder.Services.AddDefaultIdentity<Spartan>(options => options.SignIn.RequireCo
     .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<ApplicationDbContext>();
 
+builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<IWeekService, WeekService>();
 builder.Services.AddScoped<ITraineeService, TraineeService>();
 

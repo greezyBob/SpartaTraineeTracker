@@ -310,7 +310,7 @@ public class Tests
         {
             Start = "Eating carrots",
             Stop = "Eating crisps",
-            Continue = "Drinking Water removeweekdecrease",
+            Continue = "Drinking Water",
             Spartan = spartanObj
         };
         _context.Weeks.Add(weekObj);
@@ -356,7 +356,7 @@ public class Tests
         {
             Start = "Eating carrots",
             Stop = "Eating crisps",
-            Continue = "Drinking Water removeweek weekisremoved",
+            Continue = "Drinking Water",
             Spartan = spartanObj1
         };
         _context.Weeks.Add(weekObj);
