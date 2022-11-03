@@ -68,7 +68,7 @@ namespace TraineeTrackerApp.Controllers
         // GET: Weeks/Create
         public IActionResult Create()
         {
-            ViewData["SpartanId"] = new SelectList(_service.GetSpartansAsync().Result, "Id", "Id");
+            //ViewData["SpartanId"] = new SelectList(_service.GetSpartansAsync().Result, "Id", "Id");
             return View();
         }
 
@@ -97,7 +97,7 @@ namespace TraineeTrackerApp.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
-            ViewData["SpartanId"] = new SelectList(_service.GetSpartansAsync().Result, "Id", "Id", week.SpartanId);
+            //ViewData["SpartanId"] = new SelectList(_service.GetSpartansAsync().Result, "Id", "Id", week.SpartanId);
             return View(week);
         }
 
@@ -122,7 +122,7 @@ namespace TraineeTrackerApp.Controllers
                 return Unauthorized();
             }
 
-            ViewData["SpartanId"] = new SelectList(_service.GetSpartansAsync().Result, "Id", "Id", week.SpartanId);
+            //ViewData["SpartanId"] = new SelectList(_service.GetSpartansAsync().Result, "Id", "Id", week.SpartanId);
             return View(week);
         }
 

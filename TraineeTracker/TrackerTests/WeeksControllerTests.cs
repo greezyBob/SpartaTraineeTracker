@@ -11,6 +11,8 @@ namespace TrackerTests;
 
 internal class WeeksControllerTests
 {
+    // Note add tests to check logged in user privileges
+
     #region Index()
     //public async Task<IActionResult> Index()
     //{
@@ -151,16 +153,39 @@ internal class WeeksControllerTests
 
     //    return View(week);
     //}
+
+    [Ignore("NotImplemented")]
+    [Test]
+    public void Details_ReturnsTypeOfWeek()
+    {
+        Assert.That(true);
+    }
+
+    [Ignore("NotImplemented")]
+    [Test]
+    public void Details_GivenValidWeekId_ReturnsWeek()
+    {
+        Assert.That(true);
+    }
+
+    [Ignore("NotImplemented")]
+    [Test]
+    public void Details_GivenInvalidWeekId_Returns404NotFound()
+    {
+        Assert.That(true);
+    }
     #endregion
 
     #region Create()
     //// GET: Weeks/Create
     //public IActionResult Create()
     //{
-    //    ViewData["SpartanId"] = new SelectList(_service.GetSpartansAsync().Result, "Id", "Id");
+    ////   ViewData["SpartanId"] = new SelectList(_service.GetSpartansAsync().Result, "Id", "Id");
     //    return View();
     //}
+    #endregion
 
+    #region Create(Week)
     //// POST: Weeks/Create
     //// To protect from overposting attacks, enable the specific properties you want to bind to.
     //// For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
@@ -186,9 +211,23 @@ internal class WeeksControllerTests
     //        return RedirectToAction(nameof(Index));
     //    }
 
-    //    ViewData["SpartanId"] = new SelectList(_service.GetSpartansAsync().Result, "Id", "Id", week.SpartanId);
+    ////    ViewData["SpartanId"] = new SelectList(_service.GetSpartansAsync().Result, "Id", "Id", week.SpartanId);
     //    return View(week);
     //}
+
+    [Ignore("NotImplemented")]
+    [Test]
+    public void Create_ReturnsTypeOfWeek()
+    {
+        Assert.That(true);
+    }
+
+    [Ignore("NotImplemented")]
+    [Test]
+    public void Create_GivenWeek_ReturnsWeek()
+    {
+        Assert.That(true);
+    }
     #endregion
 
     #region Edit(int)
@@ -213,9 +252,30 @@ internal class WeeksControllerTests
     //        return Unauthorized();
     //    }
 
-    //    ViewData["SpartanId"] = new SelectList(_service.GetSpartansAsync().Result, "Id", "Id", week.SpartanId);
+    ////    ViewData["SpartanId"] = new SelectList(_service.GetSpartansAsync().Result, "Id", "Id", week.SpartanId);
     //    return View(week);
     //}
+
+    [Ignore("NotImplemented")]
+    [Test]
+    public void Edit_ReturnsTypeOfWeek()
+    {
+        Assert.That(true);
+    }
+
+    [Ignore("NotImplemented")]
+    [Test]
+    public void Edit_GivenValidId_ReturnsWeek()
+    {
+        Assert.That(true);
+    }
+
+    [Ignore("NotImplemented")]
+    [Test]
+    public void Edit_GivenInvalidId_Returns404()
+    {
+        Assert.That(true);
+    }
     #endregion
 
     #region Edit(int, Week)
@@ -262,6 +322,20 @@ internal class WeeksControllerTests
     //    ViewData["SpartanId"] = new SelectList(_service.GetSpartansAsync().Result, "Id", "Id", week.SpartanId);
     //    return View(week);
     //}
+
+    [Ignore("NotImplemented")]
+    [Test]
+    public void Edit_Given_ReturnsTypeOfWeek()
+    {
+        Assert.That(true);
+    }
+
+    [Ignore("NotImplemented")]
+    [Test]
+    public void Edit_GivenValidIdAndValidWeek_ReturnsWeek()
+    {
+        Assert.That(true);
+    }
     #endregion
 
     #region Delete(int)
@@ -281,6 +355,27 @@ internal class WeeksControllerTests
 
     //    return View(week);
     //}
+
+    [Ignore("NotImplemented")]
+    [Test]
+    public void Delete_ReturnsTypeOfWeek()
+    {
+        Assert.That(true);
+    }
+
+    [Ignore("NotImplemented")]
+    [Test]
+    public void Delete_GivenValidId_ReturnsWeek()
+    {
+        Assert.That(true);
+    }
+
+    [Ignore("NotImplemented")]
+    [Test]
+    public void Delete_GivenInvalidId_Return404()
+    {
+        Assert.That(true);
+    }
     #endregion
 
     #region DeleteConfirmed(int)
@@ -307,6 +402,27 @@ internal class WeeksControllerTests
 
     //    return RedirectToAction(nameof(Index));
     //}
+
+    [Ignore("NotImplemented")]
+    [Test]
+    public void Delete_ReturnsTypeOfViewResultIndex()
+    {
+        Assert.That(true);
+    }
+
+    [Ignore("NotImplemented")]
+    [Test]
+    public void Delete_GivenValidId_ReturnsIndexView()
+    {
+        Assert.That(true);
+    }
+
+    [Ignore("NotImplemented")]
+    [Test]
+    public void Delete_GivenInvalidId_Returns404()
+    {
+        Assert.That(true);
+    }
     #endregion
 
     #region WeekExists(int)
@@ -314,5 +430,12 @@ internal class WeeksControllerTests
     //{
     //    return _service.GetWeekByIdAsync(id).Result != null;
     //}
+
+    [Ignore("NotImplemented")]
+    [Test]
+    public void WeekExists_ReturnsTypeOfBool()
+    {
+        Assert.That(true);
+    }
     #endregion
 }
