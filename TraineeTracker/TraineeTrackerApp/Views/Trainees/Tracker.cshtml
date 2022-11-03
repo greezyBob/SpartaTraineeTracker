@@ -6,11 +6,17 @@
 <div class="mt-auto mb-auto">
     <h1>Index</h1>
 
-    <table class="table w-75">
+    <table class="table">
         <thead>
             <tr>
                 <th>
                     @Html.DisplayNameFor(model => model.WeekStart)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.TechnicalSkill)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.ConsultantSkill)
                 </th>
                 <th></th>
             </tr>
@@ -18,10 +24,24 @@
         <tbody>
             @foreach (var item in Model)
             {
-                    <tr>
-                        <td>
+                <tr>
+                    <td>
                         @Html.DisplayFor(modelItem => item.WeekStart)
-                        </td>
+                    </td>
+                    <td>
+                        <div class="badge rounded-pill technical">
+                            <div class="technicalValue">
+                                @Html.DisplayFor(modelItem => item.TechnicalSkill)
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="badge rounded-pill consultant">
+                            <div class="consultantValue">
+                                @Html.DisplayFor(modelItem => item.ConsultantSkill)
+                            </div>
+                        </div>
+                    </td>
                         <td class="text-end">
                             <div class="btn-group">
                                     <a class="btn btn-info" asp-action="WeekDetails" asp-route-id="@item.Id">WeekDetails</a>
@@ -32,6 +52,5 @@
         </tbody>
     </table>
 </div>
-<div>
-    <a asp-action="Index">Back to Trainees</a>
-</div>
+
+<script src="~/js/weekDetails.js"></script>
