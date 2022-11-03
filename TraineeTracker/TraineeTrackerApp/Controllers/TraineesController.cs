@@ -29,6 +29,8 @@ namespace TraineeTrackerApp.Controllers
 
 
         // GET: Trainees
+
+        [Authorize(Roles = "Trainee, Trainer, Admin")]
         public async Task<IActionResult> Index()
         {
             var currentUser = await _userManager.GetUserAsync(HttpContext.User);
@@ -41,6 +43,7 @@ namespace TraineeTrackerApp.Controllers
         }
 
         // GET: Trainees/Details/{id}
+        [Authorize(Roles = "Trainee, Trainer, Admin")]
         public async Task<IActionResult> Details(string? id)
         {
             if (id == null || _traineeService.GetSpartansAsync().Result == new List<Spartan>())
@@ -90,6 +93,8 @@ namespace TraineeTrackerApp.Controllers
 
             return View(week);
         }
+
+
 
     }
 }

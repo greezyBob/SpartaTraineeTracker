@@ -1,0 +1,47 @@
+﻿@model IEnumerable<TraineeTrackerApp.Models.Spartan>
+
+@{
+    ViewData["Title"] = "Index";
+}
+<div class="mt-auto mb-auto">
+    <h1>Index</h1>
+
+    <table class="table w-75">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.FirstName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.LastName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.StartDate)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.FirstName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.LastName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.StartDate)
+                    </td>
+                    <td class="text-end">
+                        <div>
+                            <a class="btn btn-danger" asp-area="" asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                            <a class="btn btn-danger" asp-area="" asp-action="Promote" asp-route-id="@item.Id">Promote</a>
+                        </div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
