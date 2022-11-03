@@ -52,4 +52,49 @@ public class SpartansController : Controller
 
         return View(spartan);
     }
+
+
+    [Authorize(Roles = "Admin")]
+    // POST: Delete/Trainees/{id}
+    public async Task<IActionResult> Delete(string? id)
+    {
+        if (id == null || _traineeService.GetSpartansAsync().Result == new List<Spartan>())
+        {
+            return NotFound();
+        }
+
+        var spartan = await _traineeService.GetSpartanByIdAsync(id);
+        if (spartan == null)
+        {
+            return NotFound();
+        }
+
+        return View(spartan);
+    }
+
+    // POST: Delete/Trainees/{id}
+    [Authorize(Roles = "Admin")]
+    [HttpPost, ActionName("Delete")]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> DeleteConfirmed(string? id)
+    {
+        if (_traineeService.GetSpartansAsync().Result == new List<Spartan>())
+        {
+            return Problem("Entity set 'ApplicationDbContext.Spartans' is empty.");
+        }
+
+
+        var spartan = await _traineeService.GetSpartanByIdAsync(id);
+        var currentUser = await _userManager.GetUserAsync(HttpContext.User);
+        if (spartan.Id == currentUser.Id)
+        {
+            return Unauthorized();
+        }
+        if (spartan != null)
+        {
+            await _traineeService.RemoveSpartanAsync(spartan);
+        }
+
+        return RedirectToAction(nameof(Index));
+    }
 }

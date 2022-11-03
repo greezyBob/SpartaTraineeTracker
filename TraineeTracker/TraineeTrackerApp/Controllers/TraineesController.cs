@@ -29,7 +29,7 @@ namespace TraineeTrackerApp.Controllers
 
         // GET: Trainees
 
-        [Authorize(Roles = "Trainer, Admin")]
+        [Authorize(Roles = "Trainee, Trainer, Admin")]
         public async Task<IActionResult> Index()
         {
             var spartans = await _traineeService.GetSpartansAsync();
@@ -37,7 +37,7 @@ namespace TraineeTrackerApp.Controllers
         }
 
         // GET: Trainees/Details/{id}
-        [Authorize(Roles = "Trainer, Admin")]
+        [Authorize(Roles = "Trainee, Trainer, Admin")]
         public async Task<IActionResult> Details(string? id)
         {
             if (id == null || _traineeService.GetSpartansAsync().Result == new List<Spartan>())
@@ -76,6 +76,8 @@ namespace TraineeTrackerApp.Controllers
 
             return View(week);
         }
+
+
 
     }
 }
