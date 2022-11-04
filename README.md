@@ -34,6 +34,8 @@ git clone https://github.com/GitAdamReed/SpartaTraineeTrackerGroup1.git
 ```
 Open up the project in Visual Studio and in the package manager console run
 ```
+drop-database
+
 update-database
 ```
 Click on run and the project will open in your default browser
