@@ -29,6 +29,15 @@ body {
     background-color: #cb315894;
 }
 
+
+
+.nav-pills .nav-link.active, .nav-pills .show > .nav-link {
+    background-color: #cb3158;
+}
+
+.nav-pills .nav-link, .nav-pills .show > .nav-link {
+    color: #cb3158;
+
 .indexBtn {
     color: white;
     text-decoration: none;
@@ -45,4 +54,5 @@ body {
 
 .navLinkCustom:hover {
     opacity: 0.8;
+
 }
