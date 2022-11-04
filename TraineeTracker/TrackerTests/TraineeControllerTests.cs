@@ -36,6 +36,11 @@ namespace TrackerTests
                 LastName = "Bollards"
             });
 
+            List<String> roles = new List<String>();
+            roles.Add("Trainee");
+            roles.Add("Trainer");
+            roles.Add("Admin");
+
             // Arrange
             var serviceMockWeek = new Mock<IWeekService>();
 
@@ -44,7 +49,8 @@ namespace TrackerTests
 
             var store = new Mock<IUserStore<Spartan>>();
             var userMgrMock = new Mock<UserManager<Spartan>>(store.Object, null, null, null, null, null, null, null, null);
-            userMgrMock.Setup(mock => mock.GetUserAsync(It.IsAny<ClaimsPrincipal>())).ReturnsAsync(It.IsAny<Spartan>());
+            userMgrMock.Setup(mock => mock.GetUserAsync(It.IsAny<ClaimsPrincipal>())).ReturnsAsync(spartans[1]);
+            userMgrMock.Setup(mock => mock.GetRolesAsync(It.IsAny<Spartan>())).ReturnsAsync(roles);
 
             var sut = new TraineesController(serviceMockTrainee.Object, serviceMockWeek.Object, userMgrMock.Object);
             sut.ControllerContext = new ControllerContext
