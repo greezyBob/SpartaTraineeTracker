@@ -10,7 +10,7 @@
 <div class="container p-4">
     <div class="d-flex justify-content-between">
         <h3>@ViewData["Title"]: @Model.Username</h3>
-        <button class="btn spartapink text-light" onclick="edit(event)"><i class="bi bi-pencil-square"></i> Edit</button>
+        <button class="btn spartapink indexBtn" onclick="edit(event)"><i class="bi bi-pencil-square"></i> Edit</button>
     </div>
         <form id="profile-form" class="row mg-4" method="post">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
@@ -30,10 +30,10 @@
                 <span asp-validation-for="Input.PhoneNumber" class="text-danger"></span>
             </div>
         <div class="col-6 py-4">
-            <button class="btn spartapink text-light" onclick="copyKey(event)" style="margin: 2em 0 0 4em">API Key</button>
+            <button class="btn spartapink indexBtn" onclick="copyKey(event)" style="margin: 2em 0 0 4em">API Key</button>
             <input asp-for="UID" id="key" hidden />
         </div>
-            <button id="update-profile-button" type="submit" style="margin-left: .5em" class="w-25 mt-4 btn btn-lg spartapink text-light" disabled>Save</button>
+            <button id="update-profile-button" type="submit" style="margin-left: .5em" class="w-25 mt-4 btn btn-lg spartapink indexBtn" disabled>Save</button>
         </form>
    
 </div>
