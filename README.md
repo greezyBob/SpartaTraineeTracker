@@ -28,13 +28,14 @@ This repository contains the final project for the Sparta Global C# Development 
 
 ## Getting Started
 Clone the repo 
-'''
+
+```
 git clone https://github.com/GitAdamReed/SpartaTraineeTrackerGroup1.git
-'''
+```
 Open up the project in Visual Studio and in the package manager console run
-'''
+```
 update-database
-'''
+```
 Click on run and the project will open in your default browser
 
 ## The Design Process
