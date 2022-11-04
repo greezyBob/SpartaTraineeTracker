@@ -56,12 +56,6 @@ All buttons on the site also have "fading" effect when you hover over them. This
 
 ## How To Use The Website
 
-### Register
-
-### Login
-
-### Profile and Logout
-
 ### Trainee
 **INDEX PAGE:**
 
