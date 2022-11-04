@@ -17,8 +17,11 @@ William Stickler
 - [Overview](#overview)
 - [Getting Started](#getting-started)
 - [The Design Process](#the-design-process)
-- [How To Use](#how-to-use)
+- [How To Use The Website](#how-to-use-the-website)
+- [Approach to Testing](#approach-to-testing)
 - [API Documentation](#api-documentation)
+    - [Operations](#operations)
+    - [Paths](#paths)
 
 ---
 <br>
@@ -143,9 +146,12 @@ was introduced late into development.
 `application/json`
 
 ## Operations
-[getCustomers](#get-customers)<br>
-[getCustomers_Id](#get-customerid)<br>
-[getCustomers_Search](#get-customersearch)
+[getWeeks](#get-weeks)<br>
+[createWeek](#post-weeks)<br>
+[getWeek](#get-weeksid)<br>
+[updateWeek](#put-weeksid)<br>
+[deleteWeek](#delete-weekid)<br>
+[getUsers](#get-users)
 
 ## Paths
 ### GET /Weeks
@@ -198,13 +204,13 @@ Creates a week assigned to the user accessing it.
 | Type          | Name          | Description   | Schema        |
 | ------------- | ------------- | ------------- | ------------- |
 | Header        | Access-Token  |This is a _required_ parameter |string|
-| Body          | start         |This is an _optional_ parameter that is used to filter by.|string|
-| Body         | stop           |This is an _optional_ parameter that is used to filter by.|string|
-| Body         | continue       |This is an _optional_ parameter that is used to filter by.|string|
-| Body         | weekStart      |This is an _optional_ parameter that is used to filter by.|date|
-| Body         | gitHubLink     |This is an _optional_ parameter that is used to filter by.|string|
-| Body         | technicalSkill |This is an _optional_ parameter that is used to filter by.|enum|
-| Body         | consultantSkill|This is an _optional_ parameter that is used to filter by.|enum|
+| Body          | start         |This is an _optional_ parameter|string|
+| Body          | stop          |This is an _optional_ parameter|string|
+| Body          | continue      |This is an _optional_ parameter|string|
+| Body          | weekStart     |This is an _optional_ parameter|date|
+| Body          | gitHubLink    |This is an _optional_ parameter|string|
+| Body          | technicalSkill|This is an _optional_ parameter|enum|
+| Body          | consultantSkill|This is an _optional_ parameter|enum|
 #### Response
 ```json
 {
@@ -233,7 +239,7 @@ Returns a single week for the given id.
 | Type          | Name          | Description   | Schema        |
 | ------------- | ------------- | ------------- | ------------- |
 | Header        | Access-Token  |This is a _required_ parameter |string|
-| Path          | {id}          |This is an _optional_ parameter that is used to filter by.|string|
+| Path          | {id}          |This is an _optional_ parameter|string|
 #### Response
 ```json
 {
@@ -262,14 +268,14 @@ Returns a list of all customers but can be filtered with parameters.
 | Type          | Name          | Description   | Schema        |
 | ------------- | ------------- | ------------- | ------------- |
 | Header        | Access-Token  |This is a _required_ parameter |string|
-| Path          | {id}          |This is an _optional_ parameter that is used to filter by.|string|
-| Body          | start         |This is an _optional_ parameter that is used to filter by.|string|
-| Body         | stop           |This is an _optional_ parameter that is used to filter by.|string|
-| Body         | continue       |This is an _optional_ parameter that is used to filter by.|string|
-| Body         | weekStart      |This is an _optional_ parameter that is used to filter by.|date|
-| Body         | gitHubLink     |This is an _optional_ parameter that is used to filter by.|string|
-| Body         | technicalSkill |This is an _optional_ parameter that is used to filter by.|enum|
-| Body         | consultantSkill|This is an _optional_ parameter that is used to filter by.|enum|
+| Path          | {id}          |This is an _optional_ parameter|string|
+| Body          | start         |This is an _optional_ parameter|string|
+| Body          | stop          |This is an _optional_ parameter|string|
+| Body          | continue      |This is an _optional_ parameter|string|
+| Body          | weekStart     |This is an _optional_ parameter|date|
+| Body          | gitHubLink    |This is an _optional_ parameter|string|
+| Body          | technicalSkill|This is an _optional_ parameter|enum|
+| Body          | consultantSkill|This is an _optional_ parameter|enum|
 #### Response
 ```json
 {
@@ -298,7 +304,7 @@ Returns a list of all customers but can be filtered with parameters.
 | Type          | Name          | Description   | Schema        |
 | ------------- | ------------- | ------------- | ------------- |
 | Header        | Access-Token  |This is a _required_ parameter |string|
-| Path          | {id}          |This is an _optional_ parameter that is used to filter by.|string|
+| Path          | {id}          |This is an _optional_ parameter|string|
 #### Response
 ```json
 {
