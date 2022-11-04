@@ -1,0 +1,36 @@
+﻿@model IEnumerable<TraineeTrackerApp.Models.Spartan>
+
+@{
+    ViewData["Title"] = "Index";
+}
+<div class="mt-auto mb-auto">
+    <h1>Trainees</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Email)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Email)
+                    </td>
+                    <td class="text-end">
+                        <div>
+                            <a class="btn indexBtn spartapink" asp-action="Details" asp-route-id="@item.Id">Details</a>
+                            <a class="btn indexBtn spartapink" asp-action="Tracker" asp-route-id="@item.Id">Tracker</a>
+                        </div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    
+</div>

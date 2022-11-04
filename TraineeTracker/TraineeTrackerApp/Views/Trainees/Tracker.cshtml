@@ -1,0 +1,57 @@
+﻿@model IEnumerable<TraineeTrackerApp.Models.Week>
+
+@{
+    ViewData["Title"] = "Tracker";
+}
+<div class="mt-auto mb-auto">
+    <h1>Tracker</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.WeekStart)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.TechnicalSkill)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.ConsultantSkill)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.WeekStart)
+                    </td>
+                    <td>
+                        <div class="badge rounded-pill technical">
+                            <div class="technicalValue">
+                                @Html.DisplayFor(modelItem => item.TechnicalSkill)
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="badge rounded-pill consultant">
+                            <div class="consultantValue">
+                                @Html.DisplayFor(modelItem => item.ConsultantSkill)
+                            </div>
+                        </div>
+                    </td>
+                        <td class="text-end">
+                            <div class="btn-group">
+                                    <a class="btn spartapink indexBtn" asp-action="WeekDetails" asp-route-id="@item.Id">Week Details</a>
+                            </div>
+                        </td>
+                    </tr>
+            }
+        </tbody>
+    </table>
+    <a class="btn spartapink indexBtn" asp-action="Index" asp-route-id="">Back</a>
+</div>
+
+<script src="~/js/weekDetails.js"></script>

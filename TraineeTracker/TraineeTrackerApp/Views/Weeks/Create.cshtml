@@ -1,0 +1,67 @@
+﻿@model TraineeTrackerApp.Models.Week
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create</h1>
+
+<h4>Week</h4>
+<hr />
+<div class="row">
+    <div class="col-md-8">
+        <form asp-action="Create" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group card border-dark mb-4">
+                <label asp-for="Start" class="control-label card-header spartapink text-white fs-4"></label>
+                <textarea asp-for="Start" class="form-control card-body"></textarea>
+                <span asp-validation-for="Start" class="text-danger"></span>
+            </div>
+            <div class="form-group card border-dark mb-4">
+                <label asp-for="Stop" class="control-label card-header spartapink text-white fs-4"></label>
+                <textarea asp-for="Stop" class="form-control card-body"></textarea>
+                <span asp-validation-for="Stop" class="text-danger"></span>
+            </div>
+            <div class="form-group card border-dark mb-4">
+                <label asp-for="Continue" class="control-label card-header spartapink text-white fs-4"></label>
+                <textarea asp-for="Continue" class="form-control card-body"></textarea>
+                <span asp-validation-for="Continue" class="text-danger"></span>
+            </div>
+            <div class="d-flex justify-content-start">
+                <div class="flex-column">
+                    <div class="form-group card border-dark mb-4">
+                        <label asp-for="WeekStart" class="control-label card-header spartapink text-white fs-4"></label>
+                        <input asp-for="WeekStart" class="form-control card-body" />
+                        <span asp-validation-for="WeekStart" class="text-danger"></span>
+                    </div>
+                    <div class="form-group card border-dark mb-4">
+                        <label asp-for="TechnicalSkill" class="control-label card-header spartapink text-white fs-4"></label>
+                        @Html.DropDownListFor(w => w.TechnicalSkill,
+                        new SelectList(Enum.GetValues(typeof(Proficiency))), "Select technical skill level")
+                    </div>
+                </div>
+                <div class="d-flex flex-column ms-4">
+                    <div class="form-group card border-dark mb-4">
+                        <label asp-for="GitHubLink" class="control-label card-header spartapink text-white fs-4"></label>
+                        <input asp-for="GitHubLink" class="form-control card-body" />
+                        <span asp-validation-for="GitHubLink" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group card border-dark mb-4">
+                        <label asp-for="ConsultantSkill" class="control-label card-header spartapink text-white fs-4"></label>
+                        @Html.DropDownListFor(w => w.ConsultantSkill,
+                        new SelectList(Enum.GetValues(typeof(Proficiency))), "Select consultant skill level")
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <a asp-action="Index" class="btn spartapink indexBtn">Back to List</a>
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
