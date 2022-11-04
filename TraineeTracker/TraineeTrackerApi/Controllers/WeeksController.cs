@@ -20,19 +20,28 @@ namespace TraineeTrackerApi.Controllers
             _userManager = userManager;
         }
 
-        // Roles checking to requests.
-
         [HttpGet]
         public async Task<ActionResult> GetWeeksForSpartan()
         {
             var headerHasToken = Request.Headers.TryGetValue("Access-Token", out var accessToken);
             if (!headerHasToken) return Unauthorized(ResponseBuilder.GetResponse_Error_NoAccessToken());
+
             var user = await _userManager.FindByIdAsync(accessToken);
+            if (user == null) return Unauthorized(ResponseBuilder.GetResponse_Error_NoAccess());
+
             var role = await _userManager.GetRolesAsync(user);
+            if (user == null) return Unauthorized(ResponseBuilder.GetResponse_Error_NoAccess());
 
             List<Week> weeks = new List<Week>();
 
             if (role.Contains("Trainer"))
+            {
+                weeks = _service.GetWeeksAsync().Result
+                    .OrderBy(w => w.SpartanId)
+                    .ThenBy(w => w.WeekStart)
+                    .ToList();
+            }
+            else if (role.Contains("Trainee"))
             {
                 weeks = _service.GetWeeksAsync().Result
                     .Where(w => w.SpartanId == accessToken)
@@ -42,11 +51,7 @@ namespace TraineeTrackerApi.Controllers
             }
             else
             {
-                weeks = _service.GetWeeksAsync().Result
-                    .Where(w => w.SpartanId == accessToken)
-                    .OrderBy(w => w.SpartanId)
-                    .ThenBy(w => w.WeekStart)
-                    .ToList();
+                return Unauthorized(ResponseBuilder.GetResponse_Error_NoAccess());
             }
 
             List<WeekDTO> dtoList = new List<WeekDTO>();
@@ -64,8 +69,12 @@ namespace TraineeTrackerApi.Controllers
         {
             var headerHasToken = Request.Headers.TryGetValue("Access-Token", out var accessToken);
             if (!headerHasToken) return Unauthorized(ResponseBuilder.GetResponse_Error_NoAccessToken());
+
             var user = await _userManager.FindByIdAsync(accessToken);
+            if (user == null) return Unauthorized(ResponseBuilder.GetResponse_Error_NoAccess());
+
             var role = await _userManager.GetRolesAsync(user);
+            if (user == null) return Unauthorized(ResponseBuilder.GetResponse_Error_NoAccess());
 
             if (role.Contains("Trainer") || role.Contains("Admin"))
                 return Unauthorized(ResponseBuilder.GetResponse_Error_NoAccess()); // Change response to include details to go to different enpoint if trainer.
@@ -109,17 +118,19 @@ namespace TraineeTrackerApi.Controllers
         {
             var headerHasToken = Request.Headers.TryGetValue("Access-Token", out var accessToken);
             if (!headerHasToken) return Unauthorized(ResponseBuilder.GetResponse_Error_NoAccessToken());
-            var user = await _userManager.FindByIdAsync(accessToken);
-            var role = await _userManager.GetRolesAsync(user);
 
-            bool isTrainer = role.Contains("Trainer");
+            var user = await _userManager.FindByIdAsync(accessToken);
+            if (user == null) return Unauthorized(ResponseBuilder.GetResponse_Error_NoAccess());
+
+            var role = await _userManager.GetRolesAsync(user);
+            if (user == null) return Unauthorized(ResponseBuilder.GetResponse_Error_NoAccess());
 
             Week? week = _service.GetWeeksAsync().Result
                 .Where(w => w.Id == id)
                 .FirstOrDefault();
 
             if (week == null) return NotFound(ResponseBuilder.GetResponse_Error_NotFound());
-            if (week.SpartanId != accessToken && !isTrainer) return Unauthorized(ResponseBuilder.GetResponse_Error_NoAccess());
+            if (week.SpartanId != accessToken && !role.Contains("Trainer")) return Unauthorized(ResponseBuilder.GetResponse_Error_NoAccess());
 
             return Ok(new
             {
@@ -129,14 +140,18 @@ namespace TraineeTrackerApi.Controllers
         }
 
 
-        // Trainer can only update the comments field, trainee can only update their own weeks.
+        // Trainer can only update the comments field, trainee can only update their own weeks. Apply different dto to show spartan first and last name only for trainers.
         [HttpPut("{id}")]
         public async Task<ActionResult> UpdateWeekByIdForSpartan(int id, WeekDTO week)
         {
             var headerHasToken = Request.Headers.TryGetValue("Access-Token", out var accessToken);
             if (!headerHasToken) return Unauthorized(ResponseBuilder.GetResponse_Error_NoAccessToken());
+
             var user = await _userManager.FindByIdAsync(accessToken);
+            if (user == null) return Unauthorized(ResponseBuilder.GetResponse_Error_NoAccess());
+
             var role = await _userManager.GetRolesAsync(user);
+            if (user == null) return Unauthorized(ResponseBuilder.GetResponse_Error_NoAccess());
 
             Week? weekToUpdate = await _service.GetWeekByIdAsync(id);
 
