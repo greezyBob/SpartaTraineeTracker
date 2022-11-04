@@ -26,8 +26,6 @@ namespace TrackerTests
         public void GivenUser_IsInRoleTrainee_Index_ReturnsRedirect_Weeks()
         {
 
-
-
             var serviceMock = new Mock<ITraineeService>();
             var loggerMock = new Mock<ILogger<HomeController>>();
 

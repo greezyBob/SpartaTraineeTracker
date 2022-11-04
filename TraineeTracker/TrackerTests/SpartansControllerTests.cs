@@ -109,7 +109,6 @@ namespace TrackerTests
 
         }
 
-        [Ignore("Spartan object can never be null")]
         [Test]
         [Category("Sad Path")]
         public void Given_SpartansId_WhenSpartanIsNull_DetailsReturns_NotFound()
@@ -120,11 +119,16 @@ namespace TrackerTests
                 FirstName = "Gary",
                 LastName = "Pints"
             });
-            spartans.Add(new Spartan());
+            spartans.Add(new Spartan
+            {
+                FirstName = "Peter",
+                LastName = "Bollards"
+            });
 
             // Arrange
             var serviceMockTrainee = new Mock<ITraineeService>();
-            serviceMockTrainee.Setup(mock => mock.GetSpartanByIdAsync(spartans[1].Id)).ReturnsAsync(spartans[1]);
+            serviceMockTrainee.Setup(mock => mock.GetSpartanByIdAsync(spartans[0].Id)).ReturnsAsync(value: null);
+            serviceMockTrainee.Setup(mock => mock.GetSpartansAsync()).ReturnsAsync(spartans);
             var serviceMockWeek = new Mock<IWeekService>();
 
             var store = new Mock<IUserStore<Spartan>>();
@@ -139,13 +143,58 @@ namespace TrackerTests
             };
 
             // Act
-            var result = sut.Details(It.IsAny<string>()).Result;
+            var result = sut.Details(spartans[0].Id).Result;
             var viewResult = (NotFoundResult)result;
 
             // Assert
             Assert.That(viewResult.StatusCode, Is.EqualTo(404));
 
         }
+
+        [Test]
+        [Category("Happy Path")]
+        public void Given_SpartansId_DirectsToValidSpartan_DetailsReturns_Spartan()
+        {
+            List<Spartan> spartans = new List<Spartan>();
+            spartans.Add(new Spartan
+            {
+                FirstName = "Gary",
+                LastName = "Pints"
+            });
+            spartans.Add(new Spartan
+            {
+                FirstName = "Peter",
+                LastName = "Bollards"
+            });
+
+            // Arrange
+            var serviceMockTrainee = new Mock<ITraineeService>();
+            serviceMockTrainee.Setup(mock => mock.GetSpartanByIdAsync(spartans[0].Id)).ReturnsAsync(spartans[0]);
+            serviceMockTrainee.Setup(mock => mock.GetSpartansAsync()).ReturnsAsync(spartans);
+            var serviceMockWeek = new Mock<IWeekService>();
+
+            var store = new Mock<IUserStore<Spartan>>();
+            var userMgrMock = new Mock<UserManager<Spartan>>(store.Object, null, null, null, null, null, null, null, null);
+            userMgrMock.Setup(mock => mock.GetUserAsync(It.IsAny<ClaimsPrincipal>())).ReturnsAsync(It.IsAny<Spartan>());
+
+            var sut = new SpartansController(serviceMockTrainee.Object, serviceMockWeek.Object, userMgrMock.Object);
+
+            sut.ControllerContext = new ControllerContext
+            {
+                HttpContext = new DefaultHttpContext()
+            };
+
+            // Act
+            var result = sut.Details(spartans[0].Id).Result;
+            var viewResult = (ViewResult)result;
+            var viewData = (Spartan)viewResult.ViewData.Model;
+
+            // Assert
+            Assert.That(viewData.FirstName, Is.EqualTo("Gary"));
+            Assert.That(viewData.LastName, Is.EqualTo("Pints"));
+
+        }
+
         #endregion
     }
 }
