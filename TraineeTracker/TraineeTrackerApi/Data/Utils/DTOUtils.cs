@@ -19,4 +19,17 @@ public static class DTOUtils
             ConsultantSkill = ((Proficiency)week.ConsultantSkill).ToString() ?? ""
         };
     }
+
+    public static SpartanDTO SpartanToDTO(Spartan spartan)
+    {
+        return new SpartanDTO
+        {
+            Email = spartan.Email,
+            Roles = new List<string>(),
+            Firstname = spartan.FirstName,
+            Lastname = spartan.LastName,
+            StartDate = spartan.StartDate.ToString("yyyy-MM-dd") ?? "",
+            WeeksCount = spartan.Weeks.Count
+        };
+    }
 }
