@@ -77,6 +77,7 @@ The edit page is functionally similar to the create page, as data can be entered
 **INDEX PAGE:**
 
 When logged in, a trainer will see a list of all trainees. For each trainee, they can view their details or tracker by clicking the respective buttons. On clicking the details button, they are directed to the details page. When the tracker button is clicked they are directed to the tracker page to view their weekly reflectives.
+
 ![Trainee Index Page](./ImagesForReadme/TrainerIndexPage.png)
 
 **DETAILS PAGE:**
