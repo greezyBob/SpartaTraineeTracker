@@ -21,9 +21,14 @@ body {
     background-color: #cb3158;
 }
 
+.spartapink80a {
+    background-color: rgba(203, 49, 88, 0.8);
+}
+
 .lightpink {
     background-color: #cb315894;
 }
+
 
 
 .nav-pills .nav-link.active, .nav-pills .show > .nav-link {
@@ -32,4 +37,22 @@ body {
 
 .nav-pills .nav-link, .nav-pills .show > .nav-link {
     color: #cb3158;
+
+.indexBtn {
+    color: white;
+    text-decoration: none;
+}
+
+.indexBtn:hover {
+    color: rgba(255, 255, 255, 0.8);
+    background-color: rgba(203, 49, 88, 0.8);
+}
+
+.indexBtnDanger:hover {
+    background-color: darkred;
+}
+
+.navLinkCustom:hover {
+    opacity: 0.8;
+
 }

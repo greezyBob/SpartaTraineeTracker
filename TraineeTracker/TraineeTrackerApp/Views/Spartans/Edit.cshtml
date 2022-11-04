@@ -1,0 +1,40 @@
+﻿@model TraineeTrackerApp.Models.Spartan
+
+@{
+    ViewData["Title"] = "Edit Role";
+}
+
+<h1>Edit Role</h1>
+
+<h4>User</h4>
+<hr />
+<div class="row">
+    <div class="col-md-8">
+        <form asp-action="Edit">
+            <div class="d-flex justify-content-start">
+                <div class="flex-column">
+                    <div class="form-group card border-dark mb-4">
+                        <label for="roles">Choose a role:</label>
+                            <select name="roles" id="roles">
+                              <option value="Trainer">Trainer</option>
+                              <option value="Trainee">Trainee</option>
+                              <option value="Admin">Admin</option>
+                            </select>
+                    </div>       
+                </div>
+            </div>
+            <div class="form-group">
+                <a asp-action="Index" class="btn spartapink indexBtn">Back to List</a>
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

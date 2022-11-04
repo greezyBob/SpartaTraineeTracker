@@ -14,7 +14,9 @@ public class Week
     public string Continue { get; set; }
     [Required]
     [DataType(DataType.Date)]
+    [Display(Name = "Week Starting")]
     public DateTime WeekStart { get; set; }
+    [Display(Name = "Github Repo Link")]
     public string? GitHubLink { get; set; }
     [Required]
     [Display(Name = "Technical Skill")]
