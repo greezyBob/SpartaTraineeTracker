@@ -1,0 +1,71 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Profile";
+    ViewData["ActivePage"] = ManageNavPages.Index;
+}
+
+
+<partial name="_StatusMessage" for="StatusMessage" />
+<div class="container p-4">
+    <div class="d-flex justify-content-between">
+        <h3>@ViewData["Title"]: @Model.Username</h3>
+        <button class="btn spartapink text-light" onclick="edit(event)"><i class="bi bi-pencil-square"></i> Edit</button>
+    </div>
+        <form id="profile-form" class="row mg-4" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="col-6 py-4">
+                <label asp-for="Input.FirstName" class="form-label"></label>
+                <input asp-for="Input.FirstName" class="form-control" disabled />
+                <span asp-validation-for="Input.FirstName" class="text-danger"></span>
+            </div>
+            <div class="col-6 py-4">
+                <label asp-for="Input.LastName" class="form-label"></label>
+                <input asp-for="Input.LastName" class="form-control" disabled />
+                <span asp-validation-for="Input.LastName" class="text-danger"></span>
+            </div>
+            <div class="col-6 py-4">
+                <label asp-for="Input.PhoneNumber" class="form-label"></label>
+                <input asp-for="Input.PhoneNumber" class="form-control" disabled />
+                <span asp-validation-for="Input.PhoneNumber" class="text-danger"></span>
+            </div>
+        <div class="col-6 py-4">
+            <button class="btn spartapink text-light" onclick="copyKey(event)" style="margin: 2em 0 0 4em">API Key</button>
+            <input asp-for="UID" id="key" hidden />
+        </div>
+            <button id="update-profile-button" type="submit" style="margin-left: .5em" class="w-25 mt-4 btn btn-lg spartapink text-light" disabled>Save</button>
+        </form>
+   
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+
+    <script>
+
+        function edit(e) {
+            e.preventDefault();
+
+            const inputs = document.querySelectorAll('.form-control');
+            const btn = document.getElementById('update-profile-button');
+            inputs.forEach(i => i.disabled = !i.disabled);
+            btn.disabled = !btn.disabled;
+        }
+
+        function copyKey(e) {
+            e.preventDefault();
+            var copyText = document.getElementById("key");
+
+            // Select the text field
+            copyText.select();
+            copyText.setSelectionRange(0, 99999); // For mobile devices
+
+            // Copy the text inside the text field
+            navigator.clipboard.writeText(copyText.value);
+
+            // Alert the copied text
+            alert("Copied the key to clipboard ");
+        }
+
+    </script>
+}

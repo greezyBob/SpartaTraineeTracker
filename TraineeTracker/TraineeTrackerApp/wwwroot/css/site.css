@@ -24,3 +24,12 @@ body {
 .lightpink {
     background-color: #cb315894;
 }
+
+
+.nav-pills .nav-link.active, .nav-pills .show > .nav-link {
+    background-color: #cb3158;
+}
+
+.nav-pills .nav-link, .nav-pills .show > .nav-link {
+    color: #cb3158;
+}
