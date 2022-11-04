@@ -4,7 +4,7 @@
     ViewData["Title"] = "Index";
 }
 <div class="mt-auto mb-auto">
-    <h1>Index</h1>
+    <h1>Spartans</h1>
 
     <table class="table">
         <thead>
@@ -23,13 +23,14 @@
                         @Html.DisplayFor(modelItem => item.Email)
                     </td>
                     <td class="text-end">
-                        <div class="btn-group">
-                            <a class="btn btn-info" asp-action="Details" asp-route-id="@item.Id">Details</a>
-                            <a class="btn btn-info" asp-action="Tracker" asp-route-id="@item.Id">Tracker</a>
+                        <div>
+                            <a class="btn indexBtn spartapink" asp-action="Details" asp-route-id="@item.Id">Details</a>
+                            <a class="btn indexBtn spartapink" asp-action="Tracker" asp-route-id="@item.Id">Tracker</a>
                         </div>
                     </td>
                 </tr>
             }
         </tbody>
     </table>
+    
 </div>
