@@ -49,4 +49,16 @@ public static class ResponseBuilder
             }
         };
     }
+
+    public static object GetResponse_Error_CannotParse(string valueToParse, string typeToParseTo)
+    {
+        return new
+        {
+            error = new
+            {
+                message = "Parsing Error",
+                details = $"Could not parse the value {{{valueToParse}}} to type {{{typeToParseTo}}}"
+            }
+        };
+    }
 }
