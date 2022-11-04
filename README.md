@@ -30,7 +30,18 @@ This repository contains the final project for the Sparta Global C# Development 
 ???
 
 ## The Design Process
-???
+
+### Overall Design
+
+The website takes quite a simplistic look, with the main colours being black and white, accompanied by Sparta Global themed colours. This was chosen as to not overwhelm the user with a large array of different colours.
+
+### Buttons
+
+![Buttons](./ImagesForReadme/Buttons.png)
+
+The button colour scheme mainly adheres to a Sparta Global theme, apart from buttons which result in important functionality when clicked, such as the Edit button.
+
+All buttons on the site also have "fading" effect when you hover over them. This was put in place to increase ease-of-use of the site. They also indicate important operations such as with the Delete button, which will transition to Dark Red when the user hovers over it to warn the user that this is a dangerous action.
 
 ## How To Use The Website
 
@@ -89,11 +100,12 @@ The edit page is functionally similar to the create page, as data can be entered
 **INDEX PAGE:**
 
 When logged in, a trainer will see a list of all trainees. For each trainee, they can view their details or tracker by clicking the respective buttons. On clicking the details button, they are directed to the details page. When the tracker button is clicked they are directed to the tracker page to view their weekly reflectives.
+
 ![Trainee Index Page](./ImagesForReadme/TrainerIndexPage.png)
 
 **DETAILS PAGE:**
 
-On the details page, a trainer can see all necessary information on the trainee, including name and email. The trainer can then click the back to list button when finished viewing the details, which will bring them back to the index page.
+On the details page, a trainer can see all necessary information on the trainee, including name and email. The trainer can then click the back button when finished viewing the details, which will bring them back to the index page.
 ![Trainee Details Page](./ImagesForReadme/TraineeDetailsPage.png)
 
 **TRACKER PAGE:**
