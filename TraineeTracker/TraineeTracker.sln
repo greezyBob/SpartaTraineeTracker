@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TraineeTrackerApp", "Traine
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TrackerTests", "TrackerTests\TrackerTests.csproj", "{473FA99C-DBBA-4389-9245-51BB6F5FAC19}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TraineeTrackerApi", "TraineeTrackerApi\TraineeTrackerApi.csproj", "{C7F0F3FA-E568-453B-A0CE-265AC06AD328}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{473FA99C-DBBA-4389-9245-51BB6F5FAC19}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{473FA99C-DBBA-4389-9245-51BB6F5FAC19}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{473FA99C-DBBA-4389-9245-51BB6F5FAC19}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C7F0F3FA-E568-453B-A0CE-265AC06AD328}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C7F0F3FA-E568-453B-A0CE-265AC06AD328}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C7F0F3FA-E568-453B-A0CE-265AC06AD328}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C7F0F3FA-E568-453B-A0CE-265AC06AD328}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
