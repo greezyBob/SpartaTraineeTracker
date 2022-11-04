@@ -39,19 +39,19 @@
             </div>
         </div>
         <div class="col-md-6 col-sm-12 gap-5 d-flex flex-column text-center justify-content-center text-white">
-            <div class="card rounded-pill" id="technical">
+            <div class="card rounded-pill technical">
                 <p class="fs-4 fw-bold card-header-pill mt-2">
                     @Html.DisplayNameFor(model => model.TechnicalSkill)
                 </p>
-                <p class="fs-4" id="technicalValue">
+                <p class="fs-4 technicalValue">
                     @Html.DisplayFor(model => model.TechnicalSkill)
                 </p>
             </div>
-            <div class="card rounded-pill" id="consultant">
+            <div class="card rounded-pill consultant">
                 <p class="fs-4 fw-bold card-header-pill mt-2">
                     @Html.DisplayNameFor(model => model.ConsultantSkill)
                 </p>
-                <p class="fs-4" id="consultantValue">
+                <p class="fs-4 consultantValue">
                     @Html.DisplayFor(model => model.ConsultantSkill)
                 </p>
             </div>
@@ -59,8 +59,8 @@
     </div>
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Index" class="btn spartapink indexBtn">Back to List</a>
+    <a asp-action="Edit" asp-route-id="@Model?.Id" class="btn btn-primary">Edit</a>
 </div>
 
 <script src="~/js/weekDetails.js"></script>

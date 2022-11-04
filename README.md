@@ -24,7 +24,7 @@ William Stickler
 <br>
 
 ## Overview
-This repository contains the final project for the Sparta Global C# Development Group "Engineering 128 & 151".
+This repository contains the final project for the Sparta Global C# Development Stream "Engineering 128 & 151" group 1. The aim of this project is to use ASP.NET Core to create a Web App and an API.
 
 ## Getting Started
 ???

@@ -27,33 +27,23 @@ namespace TraineeTrackerApp.Controllers
             _userManager = userManager;
         }
 
-
         // GET: Trainees
 
-        [Authorize(Roles = "Trainer, Admin")]
+        [Authorize(Roles = "Trainee, Trainer, Admin")]
         public async Task<IActionResult> Index()
         {
-            var currentUser = await _userManager.GetUserAsync(HttpContext.User);
-            //var applicationDbContext = _service.Weeks.Include(w => w.Spartan);
-            //return View(await applicationDbContext.ToListAsync());
             var spartans = await _traineeService.GetSpartansAsync();
-            //var filteredWeeks = weeks.Where(w => w.Email == currentUser.Id)
-            //    .OrderBy(w => w.Email).ToList();
             return View(spartans);
         }
 
         // GET: Trainees/Details/{id}
-        [Authorize(Roles = "Trainer, Admin")]
+        [Authorize(Roles = "Trainee, Trainer, Admin")]
         public async Task<IActionResult> Details(string? id)
         {
             if (id == null || _traineeService.GetSpartansAsync().Result == new List<Spartan>())
             {
                 return NotFound();
             }
-
-            //var week = await _service.Weeks
-            //    .Include(w => w.Spartan)
-            //    .FirstOrDefaultAsync(m => m.Id == id);
             var spartan = await _traineeService.GetSpartanByIdAsync(id);
             if (spartan == null)
             {
@@ -67,10 +57,6 @@ namespace TraineeTrackerApp.Controllers
         public async Task<IActionResult> Tracker(string? id)
         {
             var weeks = await _traineeService.GetWeeksBySpartanIdAsync(id);
-
-            //var filteredWeeks = weeks.Where(w => w.SpartanId == id)
-            //    .OrderBy(w => w.WeekStart).ToList();
-
             return View(weeks);
         }
 
@@ -82,9 +68,6 @@ namespace TraineeTrackerApp.Controllers
                 return NotFound();
             }
 
-            //var week = await _service.Weeks
-            //    .Include(w => w.Spartan)
-            //    .FirstOrDefaultAsync(m => m.Id == id);
             var week = await _weekService.GetWeekByIdAsync(id);
             if (week == null)
             {
@@ -93,6 +76,8 @@ namespace TraineeTrackerApp.Controllers
 
             return View(week);
         }
+
+
 
     }
 }
