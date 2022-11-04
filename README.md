@@ -88,5 +88,237 @@ On the delete page, the admin is asked if they are sure they wish to delete the 
 The promote page displays a dropdown menu where the admin can select the role they wish to change the user to. Once selected and the save button has been clicked, the database will update the user's role and the admin will be taken back to the index page. The admin can also go back to the index page if necessary using the back to list button. 
 **Put an image here of the role spartan page**
 
+## Approach to Testing
+Me (Michael) and Syed's first port of call with testing was to begin testing at the service level before testing the controllers that contains their dependencies.
+Our approach to testing the service layers was to setup an in-memory databse that service tests could safely perform CRUD methods on.
+
+One difficulty that we encountered forming these tests was that so many tests which create and delete entities simultaneously can affect each others' entities, so we had to be very
+careful to ensure each tests' dependence. One test that unexpetedly threw a spanner in the works was a test that checks for a thrown DbUpdateConcurrencyException, it unexpectedly broke
+two other tests performing delete operations when running all three together. Given more time we would have liked to have been able to find a way to run it concurrently with the rest of the
+test set.
+
+Once we were happy with the tests we formed for the Service layers, we moved on to using MOQ to test our controllers. We soon discovered that due to the dependencies on HttpContext in the Week Controller,
+we had to configure the controller context in our tests. The method for this was not immediately obvious from research, and it took a lot of trial and error to configure correctly. Given more time, we would
+have liked to have refactored our controllers' dependencies on UserManager into our service layers.
+
+After this, another layer of complexity presented itself when I tackled testing the HomeController, which uses conditional logic to test whether a user is in a particular role. For this, the documentation
+around configuring HttpContext roles is even more arcane, and it took a lot of Stack Overflow perusal to achieve correctly. The HomeControllerTests, with all its mocked dependencies and configurations, serves as
+the crown jewel of my test suites.
+
+If the code were to be refactored, certain repeated mock setups could be refactored as custom test class methods, and coverage can be expanded in certain areas, namely the TraineeController that
+was introduced late into development.
+
 ## API Documentation
-???
+### Consumes
+`application/json`
+
+### Produces
+`application/json`
+
+## Operations
+[getCustomers](#get-customers)<br>
+[getCustomers_Id](#get-customerid)<br>
+[getCustomers_Search](#get-customersearch)
+
+## Paths
+### GET /Weeks
+#### Operation: getWeeks
+#### Description
+Returns a list of all weeks available to the user that is accessing it.
+#### Parameters
+
+| Type          | Name          | Description   | Schema        |
+| ------------- | ------------- | ------------- | ------------- |
+| Header        | Access-Token  |This is a _required_ parameter |string|
+#### Response
+```json
+{
+    "link": {
+        "self": "https://localhost:7147/api/Weeks"
+    },
+    "data": [
+        {
+            "id": 1,
+            "start": "Revising for tests",
+            "stop": "Being lazy",
+            "continue": "Practicing Agile",
+            "weekStart": "2022-09-12",
+            "gitHubLink": "",
+            "technicalSkill": "PartiallySkilled",
+            "consultantSkill": "LowSkilled"
+        },
+        {
+            "id": 4,
+            "start": "Doing Homework",
+            "stop": "Getting distracted by my cat",
+            "continue": "Practicing API's",
+            "weekStart": "2022-09-12",
+            "gitHubLink": "",
+            "technicalSkill": "Skilled",
+            "consultantSkill": "PartiallySkilled"
+        },
+        ...
+    ]
+}
+```
+
+### POST /Weeks
+#### Operation: createWeek
+#### Description
+Creates a week assigned to the user accessing it.
+#### Parameters
+
+| Type          | Name          | Description   | Schema        |
+| ------------- | ------------- | ------------- | ------------- |
+| Header        | Access-Token  |This is a _required_ parameter |string|
+| Body          | start         |This is an _optional_ parameter that is used to filter by.|string|
+| Body         | stop           |This is an _optional_ parameter that is used to filter by.|string|
+| Body         | continue       |This is an _optional_ parameter that is used to filter by.|string|
+| Body         | weekStart      |This is an _optional_ parameter that is used to filter by.|date|
+| Body         | gitHubLink     |This is an _optional_ parameter that is used to filter by.|string|
+| Body         | technicalSkill |This is an _optional_ parameter that is used to filter by.|enum|
+| Body         | consultantSkill|This is an _optional_ parameter that is used to filter by.|enum|
+#### Response
+```json
+{
+    "link": {
+        "self": "https://localhost:7147/api/Weeks"
+    },
+    "data": {
+        "id": 8,
+        "start": "Playing Bobble League",
+        "stop": "Getting distracted by my cat",
+        "continue": "Making awesome ReadMe's",
+        "weekStart": "2022-11-04",
+        "gitHubLink": "",
+        "technicalSkill": "Unskilled",
+        "consultantSkill": "Unskilled"
+    }
+}
+```
+
+### GET /Weeks/{id}
+#### Operation: getWeek
+#### Description
+Returns a single week for the given id.
+#### Parameters
+
+| Type          | Name          | Description   | Schema        |
+| ------------- | ------------- | ------------- | ------------- |
+| Header        | Access-Token  |This is a _required_ parameter |string|
+| Path          | {id}          |This is an _optional_ parameter that is used to filter by.|string|
+#### Response
+```json
+{
+    "link": {
+        "self": "https://localhost:7147/api/Weeks/5"
+    },
+    "data": {
+        "id": 5,
+        "start": "Playing Bobble League",
+        "stop": "Getting distracted by my cat",
+        "continue": "Making awesome ReadMe's",
+        "weekStart": "2022-09-13",
+        "gitHubLink": "",
+        "technicalSkill": "Skilled",
+        "consultantSkill": "Skilled"
+    }
+}
+```
+
+### PUT /Weeks/{id}
+#### Operation: updateWeek
+#### Description
+Returns a list of all customers but can be filtered with parameters.
+#### Parameters
+
+| Type          | Name          | Description   | Schema        |
+| ------------- | ------------- | ------------- | ------------- |
+| Header        | Access-Token  |This is a _required_ parameter |string|
+| Path          | {id}          |This is an _optional_ parameter that is used to filter by.|string|
+| Body          | start         |This is an _optional_ parameter that is used to filter by.|string|
+| Body         | stop           |This is an _optional_ parameter that is used to filter by.|string|
+| Body         | continue       |This is an _optional_ parameter that is used to filter by.|string|
+| Body         | weekStart      |This is an _optional_ parameter that is used to filter by.|date|
+| Body         | gitHubLink     |This is an _optional_ parameter that is used to filter by.|string|
+| Body         | technicalSkill |This is an _optional_ parameter that is used to filter by.|enum|
+| Body         | consultantSkill|This is an _optional_ parameter that is used to filter by.|enum|
+#### Response
+```json
+{
+    "link": {
+        "self": "https://localhost:7147/api/Weeks/5"
+    },
+    "data": {
+        "id": 5,
+        "start": "Playing Bobble League",
+        "stop": "Getting distracted by my cat",
+        "continue": "Making awesome ReadMe's",
+        "weekStart": "2022-09-13",
+        "gitHubLink": "https://github.com/SyedAhmed98",
+        "technicalSkill": "Skilled",
+        "consultantSkill": "Skilled"
+    }
+}
+```
+
+### DELETE /Week/{id}
+#### Operation: deleteWeek
+#### Description
+Returns a list of all customers but can be filtered with parameters.
+#### Parameters
+
+| Type          | Name          | Description   | Schema        |
+| ------------- | ------------- | ------------- | ------------- |
+| Header        | Access-Token  |This is a _required_ parameter |string|
+| Path          | {id}          |This is an _optional_ parameter that is used to filter by.|string|
+#### Response
+```json
+{
+    "link": {
+        "self": "https://localhost:7147/api/Weeks/10"
+    },
+    "status": "success",
+    "message": "Week has been deleted"
+}
+```
+
+### GET /Users
+#### Operation: getUsers
+#### Description
+Returns a list of all customers but can be filtered with parameters.
+#### Parameters
+
+| Type          | Name          | Description   | Schema        |
+| ------------- | ------------- | ------------- | ------------- |
+| Header        | Access-Token  |This is a _required_ parameter |string|
+#### Response
+```json
+{
+    "link": {
+        "self": "https://localhost:7147/api/Users"
+    },
+    "data": [
+        {
+            "email": "micheal@spartaglobal.com",
+            "firstname": "Michael",
+            "lastname": "Davies",
+            "startDate": "2022-09-12",
+            "weeksCount": 3,
+            "roles": [
+                "Trainee"
+            ]
+        },
+        {
+            "email": "syed@spartaglobal.com",
+            "firstname": "Syed",
+            "lastname": "Ahmed",
+            "startDate": "2022-09-12",
+            "weeksCount": 4,
+            "roles": [
+                "Trainee"
+            ]
+        }
+    ]
+}
+```
