@@ -1,28 +1,34 @@
-﻿const technical = document.getElementById("technical")
-const technicalValue = document.getElementById("technicalValue")
+﻿const technical = document.getElementsByClassName("technical")
+const technicalValue = document.getElementsByClassName("technicalValue")
 
-if (technicalValue.innerText == "Skilled") {
-    technical.style.backgroundColor = "rgb(29 199 106)"
-} else if (technicalValue.innerText == "PartiallySkilled") {
-    technical.style.backgroundColor = "rgb(253 197 61)"
-    technicalValue.innerText = "Partially Skilled"
-} else if (technicalValue.innerText == "LowSkilled") {
-    technical.style.backgroundColor = "rgb(255 120 20)"
-    technicalValue.innerText = "Low Skilled"
-} else if (technicalValue.innerText == "Unskilled") {
-    technical.style.backgroundColor = "rgb(235 74 62)"
+for (let i = 0; i < technical.length; i++) {
+    if (technicalValue[i].innerText == "Skilled") {
+        technical[i].style.backgroundColor = "rgb(29 199 106)"
+    } else if (technicalValue[i].innerText == "PartiallySkilled") {
+        technical[i].style.backgroundColor = "rgb(253 197 61)"
+        technicalValue[i].innerText = "Partially Skilled"
+    } else if (technicalValue[i].innerText == "LowSkilled") {
+        technical[i].style.backgroundColor = "rgb(255 120 20)"
+        technicalValue[i].innerText = "Low Skilled"
+    } else if (technicalValue[i].innerText == "Unskilled") {
+        technical[i].style.backgroundColor = "rgb(235 74 62)"
+    }
 }
 
-const consultant = document.getElementById("consultant")
-const consulantValue = document.getElementById("consultantValue")
-if (consulantValue.innerText == "Skilled") {
-    consultant.style.backgroundColor = "rgb(29 199 106)"
-} else if (consulantValue.innerText == "PartiallySkilled") {
-    consultant.style.backgroundColor = "rgb(253 197 61)"
-    consulantValue.innerText = "Partially Skilled"
-} else if (consulantValue.innerText == "LowSkilled") {
-    consultant.style.backgroundColor = "rgb(255 120 20)"
-    consulantValue.innerText = "Low Skilled"
-} else if (consulantValue.innerText == "Unskilled") {
-    consultant.style.backgroundColor = "rgb(235 74 62)"
+const consultant = document.getElementsByClassName("consultant")
+const consulantValue = document.getElementsByClassName("consultantValue")
+
+for (let i = 0; i < technical.length; i++) {
+    if (consulantValue[i].innerText == "Skilled") {
+        consultant[i].style.backgroundColor = "rgb(29 199 106)"
+    } else if (consulantValue[i].innerText == "PartiallySkilled") {
+        consultant[i].style.backgroundColor = "rgb(253 197 61)"
+        consulantValue[i].innerText = "Partially Skilled"
+    } else if (consulantValue[i].innerText == "LowSkilled") {
+        consultant[i].style.backgroundColor = "rgb(255 120 20)"
+        consulantValue[i].innerText = "Low Skilled"
+    } else if (consulantValue[i].innerText == "Unskilled") {
+        consultant[i].style.backgroundColor = "rgb(235 74 62)"
+    }
 }
+
