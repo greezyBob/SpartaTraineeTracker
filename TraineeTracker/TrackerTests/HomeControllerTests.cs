@@ -25,6 +25,9 @@ namespace TrackerTests
         [Category("Happy Path")]
         public void GivenUser_IsInRoleTrainee_Index_ReturnsRedirect_Weeks()
         {
+
+
+
             var serviceMock = new Mock<ITraineeService>();
             var loggerMock = new Mock<ILogger<HomeController>>();
 
@@ -128,7 +131,7 @@ namespace TrackerTests
 
         #endregion
 
-        #region Create
+        #region Privacy()
 
         [Test]
         [Category("Happy Path")]
@@ -153,7 +156,7 @@ namespace TrackerTests
 
         #endregion
 
-        #region Create
+        #region Error()
 
         [Test]
         [Category("Happy Path")]

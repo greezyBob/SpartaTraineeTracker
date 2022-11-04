@@ -127,7 +127,7 @@ internal class WeeksControllerTests
     {
         // Arrange
         Spartan spartan = new Spartan() { Id = Guid.NewGuid().ToString() };
-
+        
         List<Week> weeks = new List<Week>();
         weeks.Add(new Week { SpartanId = spartan.Id });
 
