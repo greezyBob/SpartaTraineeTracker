@@ -1,8 +1,10 @@
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
 using TraineeTrackerApp.Data;
 using TraineeTrackerApp.Models;
 using TraineeTrackerApp.Services;
+using TraineeTrackerApp.Utilities;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,7 +19,6 @@ builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 builder.Services.AddControllersWithViews();
 
 
-
 builder.Services.AddDefaultIdentity<Spartan>(options => options.SignIn.RequireConfirmedAccount = false)
     .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<ApplicationDbContext>();
@@ -25,6 +26,9 @@ builder.Services.AddDefaultIdentity<Spartan>(options => options.SignIn.RequireCo
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<IWeekService, WeekService>();
 builder.Services.AddScoped<ITraineeService, TraineeService>();
+builder.Services.AddSingleton<IEmailSender, EmailSender>();
+
+builder.Services.AddRazorPages();
 
 var app = builder.Build();
 

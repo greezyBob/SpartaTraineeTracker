@@ -6,16 +6,19 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - TraineeTrackerApp</title>
+    <title>@ViewData["Title"] - Trainee Tracker App</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/TraineeTrackerApp.styles.css" asp-append-version="true" />
+    <link rel="icon" type="image/x-icon" href="~/favicon.ico" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css">
 </head>
 <body>
     <header>
         <nav class="bg-black navbar navbar-expand-sm navbar-toggleable-sm navbar-dark border-bottom box-shadow mb-3">
             <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Trainee Tracker</a>
+                <img src="~/SpartaGlobalLogo.png" class="me-2"/>
+                
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -27,11 +30,15 @@
                             <li class="nav-item navLinkCustom">
                                 @if (User.IsInRole("Trainee"))
                                 {
-                                    <a class="nav-link text-white" asp-area="" asp-controller="Weeks" asp-action="Index">Weeks</a>
+                                    <a class="nav-link text-white navLinkCustom" asp-area="" asp-controller="Home" asp-action="Index">My Tracker</a>
                                 }
                                 @if (User.IsInRole("Trainer"))
                                 {
                                     <a class="nav-link text-white" asp-area="" asp-controller="Trainees" asp-action="Index">Trainees</a>
+                                }
+                                @if (User.IsInRole("Admin"))
+                                {
+                                    <a class="nav-link text-white navLinkCustom" asp-area="" asp-controller="Home" asp-action="Index">Admin Dashboard</a>
                                 }
                             </li>
                         }

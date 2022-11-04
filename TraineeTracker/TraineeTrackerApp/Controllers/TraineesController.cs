@@ -33,6 +33,22 @@ namespace TraineeTrackerApp.Controllers
         public async Task<IActionResult> Index()
         {
             var spartans = await _traineeService.GetSpartansAsync();
+            var spartansNotTrainee = new List<Spartan>();
+            foreach(var s in spartans)
+            {
+                var currentRole = await _userManager.GetRolesAsync(s);
+                if (currentRole[0] != "Trainee")
+                {
+                    spartansNotTrainee.Add(s);
+                }
+            }
+            foreach (var s in spartansNotTrainee)
+            {
+                if (spartans.Contains(s))
+                {
+                    spartans.Remove(s);
+                }
+            }
             return View(spartans);
         }
 

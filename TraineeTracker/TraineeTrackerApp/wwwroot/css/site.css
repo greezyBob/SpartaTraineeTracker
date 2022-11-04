@@ -21,12 +21,18 @@ body {
     background-color: #cb3158;
 }
 
-.spartapink80a {
-    background-color: rgba(203, 49, 88, 0.8);
-}
-
 .lightpink {
     background-color: #cb315894;
+}
+
+
+
+.nav-pills .nav-link.active, .nav-pills .show > .nav-link {
+    background-color: #cb3158;
+}
+
+.nav-pills .nav-link, .nav-pills .show > .nav-link {
+    color: #cb3158;
 }
 
 .indexBtn {
@@ -45,4 +51,5 @@ body {
 
 .navLinkCustom:hover {
     opacity: 0.8;
+
 }

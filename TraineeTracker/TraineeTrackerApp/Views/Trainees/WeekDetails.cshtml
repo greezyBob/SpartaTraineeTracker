@@ -4,6 +4,7 @@
     ViewData["Title"] = "WeekDetails";
 }
 
+
 <div>
     <h2>Week Start: @Html.DisplayFor(model => model.WeekStart) </h2>
     <p class="fs-5">
@@ -38,19 +39,19 @@
             </div>
         </div>
         <div class="col-md-6 col-sm-12 gap-5 d-flex flex-column text-center justify-content-center text-white">
-            <div class="card rounded-pill" id="technical">
+            <div class="card rounded-pill technical">
                 <p class="fs-4 fw-bold card-header-pill mt-2">
                     @Html.DisplayNameFor(model => model.TechnicalSkill)
                 </p>
-                <p class="fs-4" id="technicalValue">
+                <p class="fs-4 technicalValue">
                     @Html.DisplayFor(model => model.TechnicalSkill)
                 </p>
             </div>
-            <div class="card rounded-pill" id="consultant">
+            <div class="card rounded-pill consultant">
                 <p class="fs-4 fw-bold card-header-pill mt-2">
                     @Html.DisplayNameFor(model => model.ConsultantSkill)
                 </p>
-                <p class="fs-4" id="consultantValue">
+                <p class="fs-4 consultantValue">
                     @Html.DisplayFor(model => model.ConsultantSkill)
                 </p>
             </div>
@@ -58,5 +59,7 @@
     </div>
 </div>
 <div>
-    <a asp-action="Tracker" asp-route-id="@this.Model.SpartanId">Back to Weeks</a>
+    <a asp-action="Index" class="btn spartapink indexBtn">Back to Spartan List</a>
 </div>
+
+<script src="~/js/weekDetails.js"></script>
